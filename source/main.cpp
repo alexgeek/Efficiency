@@ -162,9 +162,81 @@ int run(lua_State *l, string file)
 }
 
 static const GLfloat g_vertex_buffer_data[] = { 
-	-1.0f, -1.0f, 0.0f,
-	 1.0f, -1.0f, 0.0f,
-	 0.0f,  1.0f, 0.0f,
+	-1.0f,-1.0f,-1.0f,
+	-1.0f,-1.0f, 1.0f,
+	-1.0f, 1.0f, 1.0f,
+	 1.0f, 1.0f,-1.0f,
+	-1.0f,-1.0f,-1.0f,
+	-1.0f, 1.0f,-1.0f,
+	 1.0f,-1.0f, 1.0f,
+	-1.0f,-1.0f,-1.0f,
+	 1.0f,-1.0f,-1.0f,
+	 1.0f, 1.0f,-1.0f,
+	 1.0f,-1.0f,-1.0f,
+	-1.0f,-1.0f,-1.0f,
+	-1.0f,-1.0f,-1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f,-1.0f,
+	 1.0f,-1.0f, 1.0f,
+	-1.0f,-1.0f, 1.0f,
+	-1.0f,-1.0f,-1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f,-1.0f, 1.0f,
+	 1.0f,-1.0f, 1.0f,
+	 1.0f, 1.0f, 1.0f,
+	 1.0f,-1.0f,-1.0f,
+	 1.0f, 1.0f,-1.0f,
+	 1.0f,-1.0f,-1.0f,
+	 1.0f, 1.0f, 1.0f,
+	 1.0f,-1.0f, 1.0f,
+	 1.0f, 1.0f, 1.0f,
+	 1.0f, 1.0f,-1.0f,
+	-1.0f, 1.0f,-1.0f,
+	 1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f,-1.0f,
+	-1.0f, 1.0f, 1.0f,
+	 1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f, 1.0f,
+	 1.0f,-1.0f, 1.0f
+};
+
+static const GLfloat g_uv_buffer_data[] = { 
+	0.000059f, 1.0f-0.000004f, 
+	0.000103f, 1.0f-0.336048f, 
+	0.335973f, 1.0f-0.335903f, 
+	1.000023f, 1.0f-0.000013f, 
+	0.667979f, 1.0f-0.335851f, 
+	0.999958f, 1.0f-0.336064f, 
+	0.667979f, 1.0f-0.335851f, 
+	0.336024f, 1.0f-0.671877f, 
+	0.667969f, 1.0f-0.671889f, 
+	1.000023f, 1.0f-0.000013f, 
+	0.668104f, 1.0f-0.000013f, 
+	0.667979f, 1.0f-0.335851f, 
+	0.000059f, 1.0f-0.000004f, 
+	0.335973f, 1.0f-0.335903f, 
+	0.336098f, 1.0f-0.000071f, 
+	0.667979f, 1.0f-0.335851f, 
+	0.335973f, 1.0f-0.335903f, 
+	0.336024f, 1.0f-0.671877f, 
+	1.000004f, 1.0f-0.671847f, 
+	0.999958f, 1.0f-0.336064f, 
+	0.667979f, 1.0f-0.335851f, 
+	0.668104f, 1.0f-0.000013f, 
+	0.335973f, 1.0f-0.335903f, 
+	0.667979f, 1.0f-0.335851f, 
+	0.335973f, 1.0f-0.335903f, 
+	0.668104f, 1.0f-0.000013f, 
+	0.336098f, 1.0f-0.000071f, 
+	0.000103f, 1.0f-0.336048f, 
+	0.000004f, 1.0f-0.671870f, 
+	0.336024f, 1.0f-0.671877f, 
+	0.000103f, 1.0f-0.336048f, 
+	0.336024f, 1.0f-0.671877f, 
+	0.335973f, 1.0f-0.335903f, 
+	0.667969f, 1.0f-0.671889f, 
+	1.000004f, 1.0f-0.671847f, 
+	0.667979f, 1.0f-0.335851f
 };
 
 int printOglError(char const* file, int line)
@@ -203,7 +275,9 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // to use this: http://stackoverflow.com/questions/17923782/simple-opengl-image-library-soil-uses-deprecated-functionality
+//	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); 
+	glfwWindowHint(GLFW_OPENGL_PROFILE,	GLFW_OPENGL_COMPAT_PROFILE);
 
     /*glfwWindowHint(GLFW_SAMPLES, 1); // 2x antialiasing
     int stencil_bits = 8;
@@ -250,13 +324,10 @@ int main(void)
     cout << "Setting GL" << endl;
         
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-    /*glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_TRUE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);   
-    glEnable(GL_STENCIL_TEST);*/
     //glEnable(GL_CULL_FACE);
 
     glfwSetCharCallback(window, &Input::glfw_character_callback);
@@ -302,34 +373,17 @@ int main(void)
     run(lua_state, "block.lua");
     run(lua_state, "load.lua");
     
-
-        
-    // temp
     printOpenGLError();
     cout << "Shader Loading" << endl;
     Shader shader("simple");
     cout << "Shader loaded." << endl;
     printOpenGLError();
-    cout << "Getting MVP location. ";
-  	GLuint mvpId = glGetUniformLocation(shader.id(), "MVP");
-  	cout << "Got MVP location" << endl;
-  	
-    // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
-    // Or, for an ortho camera :
-    //glm::mat4 Projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f); // In world coordinates
-
-    // Camera matrix
-    glm::mat4 View = glm::lookAt(
-        glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
-        glm::vec3(0,0,0), // and looks at the origin
-        glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
-    );
-    // Model matrix : an identity matrix (model will be at the origin)
-    glm::mat4 Model      = glm::mat4(1.0f);
-    // Our ModelViewProjection : multiplication of our 3 matrices
-    glm::mat4 MVP        = Projection * View * Model; // Remember, matrix multiplication is the other way around
-
+    
+    GLuint texture = load_texture();
+	GLuint TextureID  = glGetUniformLocation(shader.id(), "myTextureSampler");
+    
+  	GLuint mvpId = glGetUniformLocation(shader.id(), "MVP"); 	
+    glm::mat4 mvp = camera.get_projection() * camera.get_view();
     
     printOpenGLError();
     cout << "Lets do the buffers" << endl;
@@ -337,15 +391,21 @@ int main(void)
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
-	// then buffers
+    // vert buffer
   	GLuint vertexbuffer;
     glGenBuffers(1, &vertexbuffer);
-    printOpenGLError();
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    // uv buffer
+	GLuint uvbuffer;
+	glGenBuffers(1, &uvbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
     cout << "Did the buffers" << endl;
     
     cout << "Starting main loop" << endl;
+    
+    float angle = 0;
                
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -361,7 +421,7 @@ int main(void)
         // update view and projection
         camera.update(window);
 
-        /* OLD WAY /*/
+        /* OLD WAY 
         // load projection from camera
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -373,10 +433,23 @@ int main(void)
         glMultMatrixf(glm::value_ptr( camera.get_view() ));
         /* OLD WAY */
         
-        /* NEW WAY 
-   		glUniformMatrix4fv(mvpId, 1, GL_FALSE, &MVP[0][0]);
-        mvp = camera.get_projection() * camera.get_view();
-        glUseProgram(shader.id());*/
+        /* NEW WAY */
+        angle += 0.1f;
+        glm::mat4 model = glm::rotate(
+            glm::mat4(1.0f),
+            angle,
+            glm::vec3(0.0f, 1.0f, 0.0f)
+        );
+        mvp = camera.get_projection() * camera.get_view() * model;
+   		glUniformMatrix4fv(mvpId, 1, GL_FALSE, &mvp[0][0]);
+   		
+		// Bind our texture in Texture Unit 0
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		// Set our "myTextureSampler" sampler to user Texture Unit 0
+		glUniform1i(TextureID, 0);
+   		
+        glUseProgram(shader.id());
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glVertexAttribPointer(
@@ -387,8 +460,22 @@ int main(void)
             0,
             (void*)0
         );
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        
+		// 2nd attribute buffer : UVs
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glVertexAttribPointer(
+			1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+			2,                                // size : U+V => 2
+			GL_FLOAT,                         // type
+			GL_FALSE,                         // normalized?
+			0,                                // stride
+			(void*)0                          // array buffer offset
+		);
+
+        glDrawArrays(GL_TRIANGLES, 0, 12*3);
         glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
         /* NEW WAY */
         
 
