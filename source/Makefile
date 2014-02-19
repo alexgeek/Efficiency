@@ -1,5 +1,6 @@
 # Compiler
-CC = g++
+CP = g++
+CC = gcc
 
 # Compiler flags
 CFLAGS = -std=c++11
@@ -14,10 +15,12 @@ LIBS = -lGLEW -lGL -lGLU -lfreetype -lX11 -lXxf86vm -lXrandr -lpthread -lXi -llu
 
 # Source files for project
 SRCS = main.cpp Input.cpp Window.cpp Triangle.cpp Camera.cpp CameraArcBall.cpp
+CSRC = util.c
 
 # Get object names from source names
 # $(target:find=replace)
 OBJS = $(SRCS:.cpp=.o)
+COBJS = $(CSRC:.c=.o)
 
 # executable filename
 MAIN = game
@@ -27,11 +30,14 @@ MAIN = game
 all:    $(MAIN)
 	@echo  Project Compiled
 
-$(MAIN): $(OBJS) 
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBA) $(LIBS) -o $(MAIN)
+$(MAIN): $(OBJS)	$(COBJS)
+	$(CP) $(CFLAGS) $(INCLUDES) $(COBJS) $(OBJS) $(LIBA) $(LIBS) -o $(MAIN)
 
-.cpp.o:
+.c.o:
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+    
+.cpp.o:
+	$(CP) $(CFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
 	$(RM) *.o *~ $(MAIN) gl.log
