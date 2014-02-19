@@ -1,3 +1,5 @@
+#include "util.h"
+
 // http://r3dux.org/2012/07/a-simple-glfw-fps-counter/
 double calcFPS(double t)
 {
@@ -38,4 +40,39 @@ double calcFPS(double t)
  
 	// Return the current FPS - doesn't have to be used if you don't want it!
 	return fps;
+}
+
+void glfw_error_callback(int error, const char* description)
+{
+    fputs(description, stderr);
+}
+
+GLuint texture[1];
+
+int load_texture()									// Load Bitmaps And Convert To Textures
+{
+	/* load an image file directly as a new OpenGL texture */
+	texture[0] = SOIL_load_OGL_texture
+		(
+		"assets/textures/grass.jpg",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_INVERT_Y
+		);
+
+	if(texture[0] == 0)
+		return 0;
+
+	return 1;
+}
+
+int screenshot()
+{
+    int save_result = SOIL_save_screenshot
+	(
+		"assets/screen.bmp",
+		SOIL_SAVE_TYPE_BMP,
+		0, 0, 1024, 768
+	);
+	return save_result;
 }

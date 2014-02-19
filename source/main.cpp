@@ -1,18 +1,18 @@
 #include "default.h"
+// lua
 #include "lua.hpp"
-#include "Triangle.h"
-#include "CameraArcBall.h"
+// c++
 #include <vector>
 #include <string>
-#include <glm/gtc/type_ptr.hpp>
+// glm
 #include <glm/gtx/string_cast.hpp>
+// me
+#include "Triangle.h"
+#include "CameraArcBall.h"
+#include "Input.h"
+#include "Shader.h"
+// c files
 #include "util.h"
-
-
-void glfw_error_callback(int error, const char* description)
-{
-    fputs(description, stderr);
-}
 
 Triangle tri(
     glm::vec3(0.0, 0.5, 0.0), 
@@ -154,20 +154,9 @@ int lua_draw(lua_State *l)
     return 0;
 }
 
-static int report (lua_State *L, int status) {
-  const char *msg;
-  if (status) {
-    msg = lua_tostring(L, -1);
-    if (msg == NULL) msg = "(error with no message)";
-    fprintf(stderr, "status=%d, %s\n", status, msg);
-    lua_pop(L, 1);
-  }
-  return status;
-}
-
-int run(lua_State *l, std::string file)
+int run(lua_State *l, string file)
 {
-    std::string filepath = "scripts/" + file;
+    string filepath = "scripts/" + file;
     if(luaL_dofile(l, filepath.c_str()))
         std::cerr << lua_tostring(l, -1) << std::endl;
 }
@@ -210,6 +199,12 @@ int main(void)
     /*glewExperimental = GL_TRUE;
     glewInit ();*/
     
+    GLenum err = glewInit();
+    if(err != GLEW_OK)
+        exit(1); // or handle the error in a nicer way
+    if(!GLEW_VERSION_2_1)  // check that the machine supports the 2.1 API.
+        exit(1); // or handle the error in a nicer way
+    
     // get version info
     const GLubyte* renderer = glGetString (GL_RENDERER); // get renderer string
     const GLubyte* version = glGetString (GL_VERSION); // version as a string
@@ -250,7 +245,7 @@ int main(void)
         lib->func(lua_state);
         lua_settop(lua_state, 0);
     }*/
-    
+        
     lua_pushcfunction(lua_state, lua_triangle);
     lua_setglobal(lua_state, "triangle");
     
@@ -269,6 +264,9 @@ int main(void)
     run(lua_state, "component.lua");
     run(lua_state, "block.lua");
     run(lua_state, "load.lua");
+    
+    // temp
+    Shader shader("model");
            
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -302,6 +300,8 @@ int main(void)
         
         if(glfwGetKey(window, 'F'))
             std::cout << "FPS: " << calcFPS(glfwGetTime()) << std::endl;
+        if(glfwGetKey(window, 'S'))
+            screenshot();
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

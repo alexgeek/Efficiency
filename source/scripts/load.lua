@@ -38,7 +38,7 @@ for x = -size, size do
       b.z = z
       b.tick = math.abs(x) + y + math.abs(z)
       b.tick = b.tick * 20
-      b.action = function(b) b.tick = b.tick - 1; if b.tick <= 0 then world.remove(b) end end
+      b.update = function(b) b.tick = b.tick - 1; if b.tick <= 0 then world.remove(b) end end
       if y <= -2 or ctr == 0 then world.add(b) end
       ctr = (ctr + 1) % 2
     end
