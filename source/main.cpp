@@ -161,6 +161,29 @@ int run(lua_State *l, string file)
         std::cerr << lua_tostring(l, -1) << std::endl;
 }
 
+static const GLfloat g_vertex_buffer_data[] = { 
+	-1.0f, -1.0f, 0.0f,
+	 1.0f, -1.0f, 0.0f,
+	 0.0f,  1.0f, 0.0f,
+};
+
+int printOglError(char const* file, int line)
+{
+
+    GLenum glErr;
+    int    retCode = 0;
+
+    glErr = glGetError();
+    if (glErr != GL_NO_ERROR)
+    {
+        printf("glError in file %s @ line %d: %s\n",
+			     file, line, gluErrorString(glErr));
+        retCode = 1;
+    }
+    return retCode;
+}
+
+#define printOpenGLError() printOglError(__FILE__, __LINE__)
 
 int main(void)
 {
@@ -176,16 +199,20 @@ int main(void)
         return 1;
     }
 
-    /*glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 2);
+//	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);*/
-    glfwWindowHint(GLFW_SAMPLES, 1); // 2x antialiasing
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    /*glfwWindowHint(GLFW_SAMPLES, 1); // 2x antialiasing
     int stencil_bits = 8;
     glfwWindowHint(GLFW_ALPHA_BITS, 8);
-    glfwWindowHint(GLFW_STENCIL_BITS, 8); // request a stencil buffer for object selection
+    glfwWindowHint(GLFW_STENCIL_BITS, 8); // request a stencil buffer for object selection*/
+    
+    
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "Curve Editor", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Game", NULL, NULL);
     glfwRestoreWindow(window);
     if (!window)
     {
@@ -195,32 +222,42 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
     
+  
     // start GLEW extension handler
-    /*glewExperimental = GL_TRUE;
-    glewInit ();*/
+    glewExperimental = GL_TRUE;
     
     GLenum err = glewInit();
     if(err != GLEW_OK)
+    {
+        cout << "GLEW error: " << glewGetErrorString(err);
         exit(1); // or handle the error in a nicer way
-    if(!GLEW_VERSION_2_1)  // check that the machine supports the 2.1 API.
-        exit(1); // or handle the error in a nicer way
-    
+    }
+    GLenum glErr = glGetError();
+    if (glErr != GL_NO_ERROR)
+    {
+        cout << "Caught GLEW init error in GL" << endl;
+    }
+
+    printOpenGLError();
+            
     // get version info
     const GLubyte* renderer = glGetString (GL_RENDERER); // get renderer string
     const GLubyte* version = glGetString (GL_VERSION); // version as a string
     printf ("Renderer: %s\n", renderer);
     printf ("OpenGL version supported %s\n", version);
-
-    glEnable(GL_MULTISAMPLE);
-    glEnable(GL_DEPTH_TEST);
+    
+    printOpenGLError();
+    cout << "Setting GL" << endl;
+        
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    /*glEnable(GL_DEPTH_TEST);
     glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_TRUE);
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glEnable(GL_STENCIL_TEST);
-    glEnable(GL_CULL_FACE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);   
+    glEnable(GL_STENCIL_TEST);*/
+    //glEnable(GL_CULL_FACE);
 
     glfwSetCharCallback(window, &Input::glfw_character_callback);
     glfwSetKeyCallback(window, &Input::glfw_key_callback);
@@ -265,16 +302,58 @@ int main(void)
     run(lua_state, "block.lua");
     run(lua_state, "load.lua");
     
+
+        
     // temp
-    Shader shader("model");
-           
+    printOpenGLError();
+    cout << "Shader Loading" << endl;
+    Shader shader("simple");
+    cout << "Shader loaded." << endl;
+    printOpenGLError();
+    cout << "Getting MVP location. ";
+  	GLuint mvpId = glGetUniformLocation(shader.id(), "MVP");
+  	cout << "Got MVP location" << endl;
+  	
+    // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+    // Or, for an ortho camera :
+    //glm::mat4 Projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f); // In world coordinates
+
+    // Camera matrix
+    glm::mat4 View = glm::lookAt(
+        glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
+        glm::vec3(0,0,0), // and looks at the origin
+        glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
+    );
+    // Model matrix : an identity matrix (model will be at the origin)
+    glm::mat4 Model      = glm::mat4(1.0f);
+    // Our ModelViewProjection : multiplication of our 3 matrices
+    glm::mat4 MVP        = Projection * View * Model; // Remember, matrix multiplication is the other way around
+
+    
+    printOpenGLError();
+    cout << "Lets do the buffers" << endl;
+    // first arrays
+	GLuint VertexArrayID;
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
+	// then buffers
+  	GLuint vertexbuffer;
+    glGenBuffers(1, &vertexbuffer);
+    printOpenGLError();
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    cout << "Did the buffers" << endl;
+    
+    cout << "Starting main loop" << endl;
+               
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         glViewport(0, 0, width, height);
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-        glClearStencil(0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+        //glClearStencil(0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT /*| GL_STENCIL_BUFFER_BIT*/);
         
         // update input and actions
         Input::instance().update(window);
@@ -282,6 +361,7 @@ int main(void)
         // update view and projection
         camera.update(window);
 
+        /* OLD WAY /*/
         // load projection from camera
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -291,6 +371,26 @@ int main(void)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glMultMatrixf(glm::value_ptr( camera.get_view() ));
+        /* OLD WAY */
+        
+        /* NEW WAY 
+   		glUniformMatrix4fv(mvpId, 1, GL_FALSE, &MVP[0][0]);
+        mvp = camera.get_projection() * camera.get_view();
+        glUseProgram(shader.id());*/
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+        glVertexAttribPointer(
+            0,
+            3,
+            GL_FLOAT,
+            GL_FALSE,
+            0,
+            (void*)0
+        );
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDisableVertexAttribArray(0);
+        /* NEW WAY */
+        
 
         if(glfwGetKey(window, 'U'))
             run(lua_state, "action.lua");
@@ -308,6 +408,11 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
     }
+	// Cleanup VBO and shader
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteProgram(shader.id());
+	glDeleteVertexArrays(1, &VertexArrayID);
+    
     // close the Lua state
     lua_close(lua_state);
     glfwTerminate();

@@ -5,7 +5,11 @@ Shader::Shader(string name)
     vertex_shader_file_ = name; vertex_shader_file_ += ".vs";
     fragment_shader_file_ = name; fragment_shader_file_ += ".fs";
     program_id_ = load_program(vertex_shader_file_.c_str(), fragment_shader_file_.c_str());
-    cout << "Shader #" << program_id_ << endl;
+}
+
+int Shader::id()
+{
+    return program_id_;
 }
 
 int Shader::load_file(string path, string& content)
@@ -59,6 +63,7 @@ int Shader::load_program(const char* vertexShaderFile, const char* fragmentShade
 	load_shader(vertexShaderId, vertexShaderFile);
 
 	load_shader(fragmentShaderId, fragmentShaderFile);
+
 
 	GLuint programId = glCreateProgram();
 	glAttachShader(programId, vertexShaderId);

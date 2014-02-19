@@ -2,12 +2,14 @@
 #define SHADER_H
 
 #include "default.h"
+#include "util.h"
 #include <fstream>
 
 class Shader
 {
     public:
         Shader(string name);
+        int id();
     protected:
         GLuint program_id_;
         string vertex_shader_file_;
