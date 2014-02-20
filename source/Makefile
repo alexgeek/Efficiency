@@ -15,7 +15,7 @@ LIBA = libs/libglfw3.a libs/libdrawtext.a libs/libSOIL.a
 LIBS = -lGLEW -lGL -lGLU -lfreetype -lX11 -lXxf86vm -lXrandr -lpthread -lXi -llua -ldl
 
 # Source files for project
-SRCS = main.cpp Input.cpp Window.cpp Triangle.cpp Camera.cpp CameraArcBall.cpp Shader.cpp
+SRCS = main.cpp Input.cpp Window.cpp Triangle.cpp Camera.cpp CameraArcBall.cpp Shader.cpp RenderCube.cpp Debug.cpp
 CSRC = util.c
 
 # Get object names from source names

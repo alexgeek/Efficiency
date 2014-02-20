@@ -47,16 +47,54 @@ void glfw_error_callback(int error, const char* description)
     fputs(description, stderr);
 }
 
-int load_texture()									// Load Bitmaps And Convert To Textures
+// http://www.lonesock.net/soil.html
+int load_texture(const char* file)									// Load Bitmaps And Convert To Textures
 {
 	/* load an image file directly as a new OpenGL texture */
 	GLuint texture = SOIL_load_OGL_texture
 		(
-		"assets/textures/grass.jpg",
+		file,
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_INVERT_Y
 		);
+		
+	if(texture == 0)
+    {   
+	printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
+    }
+	return texture;
+}
+
+// http://antongerdelan.net/opengl/cubemaps.html
+int load_texture_cube(const char* file)
+{
+    #define FRONT "grass.jpg"
+    #define BACK "assets/textures/dirt.jpg"
+    #define TOP "assets/textures/dullgrass.jpg"
+    #define BOTTOM "grass.jpg"
+    #define LEFT "grass.jpg"
+    #define RIGHT "grass.jpg"
+
+    GLuint texture = SOIL_load_OGL_cubemap (
+      file,
+      file,
+      TOP,
+      file,
+      file,
+      file,
+      SOIL_LOAD_RGB,
+      SOIL_CREATE_NEW_ID,
+      0
+    );
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    if (texture == 0) {
+      printf("SOIL loading error: '%s'\n", SOIL_last_result());
+    }
 	return texture;
 }
 
@@ -68,5 +106,7 @@ int screenshot()
 		SOIL_SAVE_TYPE_BMP,
 		0, 0, 1024, 768
 	);
+	
 	return save_result;
 }
+

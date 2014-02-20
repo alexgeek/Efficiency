@@ -44,5 +44,3 @@ for x = -size, size do
     end
   end
 end
-
-triangle(0, 1, 0, 2, -1, 0, -1, -1, 0)

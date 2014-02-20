@@ -11,44 +11,12 @@
 #include "CameraArcBall.h"
 #include "Input.h"
 #include "Shader.h"
+#include "RenderCube.h"
 // c files
 #include "util.h"
 
-Triangle tri(
-    glm::vec3(0.0, 0.5, 0.0), 
-    glm::vec3(0.5, -0.5, 0.0),
-    glm::vec3(-0.5, -0.5, 0.0));
-    
-int lua_triangle(lua_State *l)
-{
-    int argc = lua_gettop(l);
-    //if(argc != 9) return;
-    glm::vec3 v1, v2, v3;
-    v1 = glm::vec3(0);
-    for(int i = 0; i < 3; i++)
-    {
-        v1[i] = lua_tonumber(l, lua_gettop(l));
-        lua_pop(l, 1);
-    }
-    v2 = glm::vec3(0);
-    for(int i = 0; i < 3; i++)
-    {
-        v2[i] = lua_tonumber(l, lua_gettop(l));
-        lua_pop(l, 1);
-    }
-    v3 = glm::vec3(0);
-    for(int i = 0; i < 3; i++)
-    {
-        v3[i] = lua_tonumber(l, lua_gettop(l));
-        lua_pop(l, 1);
-    }
-    tri = Triangle(v1, v2, v3);
-    
-    return 0;
-}
 
 CameraArcBall camera(glm::vec3(5,5,5), glm::vec3(0,0,0));
-
 int lua_set_camera(lua_State *l)
 {
     int argc = lua_gettop(l);
@@ -72,6 +40,7 @@ int lua_set_camera(lua_State *l)
     return 0;
 }
 
+RenderCube* rc;
 int lua_drawcube(lua_State *l)
 {
     int argc = lua_gettop(l);
@@ -136,24 +105,6 @@ int lua_drawcube(lua_State *l)
     return 0;
 }
 
-float angle = 0;
-int lua_draw(lua_State *l)
-{
-    int argc = lua_gettop(l);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glRotatef(angle, 0, 1.0f, 0);
-    angle += 1.0f;
-    glBegin(GL_TRIANGLES);
-    glColor3f(0.1, 0.2, 0.3);
-    for(int i = 0; i < 9; i++)
-    glVertex3d(tri.points_[i],tri.points_[i+1],tri.points_[i+2]);
-    glEnd();
-    glPopMatrix();
-    
-    return 0;
-}
-
 int run(lua_State *l, string file)
 {
     string filepath = "scripts/" + file;
@@ -162,42 +113,42 @@ int run(lua_State *l, string file)
 }
 
 static const GLfloat g_vertex_buffer_data[] = { 
-	-1.0f,-1.0f,-1.0f,
-	-1.0f,-1.0f, 1.0f,
-	-1.0f, 1.0f, 1.0f,
-	 1.0f, 1.0f,-1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f, 1.0f,-1.0f,
-	 1.0f,-1.0f, 1.0f,
-	-1.0f,-1.0f,-1.0f,
-	 1.0f,-1.0f,-1.0f,
-	 1.0f, 1.0f,-1.0f,
-	 1.0f,-1.0f,-1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f,-1.0f,
-	 1.0f,-1.0f, 1.0f,
-	-1.0f,-1.0f, 1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f, 1.0f, 1.0f,
-	-1.0f,-1.0f, 1.0f,
-	 1.0f,-1.0f, 1.0f,
-	 1.0f, 1.0f, 1.0f,
-	 1.0f,-1.0f,-1.0f,
-	 1.0f, 1.0f,-1.0f,
-	 1.0f,-1.0f,-1.0f,
-	 1.0f, 1.0f, 1.0f,
-	 1.0f,-1.0f, 1.0f,
-	 1.0f, 1.0f, 1.0f,
-	 1.0f, 1.0f,-1.0f,
-	-1.0f, 1.0f,-1.0f,
-	 1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f,-1.0f,
-	-1.0f, 1.0f, 1.0f,
-	 1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f, 1.0f,
-	 1.0f,-1.0f, 1.0f
+	-0.5f,-0.5f,-0.5f,
+	-0.5f,-0.5f, 0.5f,
+	-0.5f, 0.5f, 0.5f,
+	 0.5f, 0.5f,-0.5f,
+	-0.5f,-0.5f,-0.5f,
+	-0.5f, 0.5f,-0.5f,
+	 0.5f,-0.5f, 0.5f,
+	-0.5f,-0.5f,-0.5f,
+	 0.5f,-0.5f,-0.5f,
+	 0.5f, 0.5f,-0.5f,
+	 0.5f,-0.5f,-0.5f,
+	-0.5f,-0.5f,-0.5f,
+	-0.5f,-0.5f,-0.5f,
+	-0.5f, 0.5f, 0.5f,
+	-0.5f, 0.5f,-0.5f,
+	 0.5f,-0.5f, 0.5f,
+	-0.5f,-0.5f, 0.5f,
+	-0.5f,-0.5f,-0.5f,
+	-0.5f, 0.5f, 0.5f,
+	-0.5f,-0.5f, 0.5f,
+	 0.5f,-0.5f, 0.5f,
+	 0.5f, 0.5f, 0.5f,
+	 0.5f,-0.5f,-0.5f,
+	 0.5f, 0.5f,-0.5f,
+	 0.5f,-0.5f,-0.5f,
+	 0.5f, 0.5f, 0.5f,
+	 0.5f,-0.5f, 0.5f,
+	 0.5f, 0.5f, 0.5f,
+	 0.5f, 0.5f,-0.5f,
+	-0.5f, 0.5f,-0.5f,
+	 0.5f, 0.5f, 0.5f,
+	-0.5f, 0.5f,-0.5f,
+	-0.5f, 0.5f, 0.5f,
+	 0.5f, 0.5f, 0.5f,
+	-0.5f, 0.5f, 0.5f,
+	 0.5f,-0.5f, 0.5f
 };
 
 static const GLfloat g_uv_buffer_data[] = { 
@@ -238,24 +189,6 @@ static const GLfloat g_uv_buffer_data[] = {
 	1.000004f, 1.0f-0.671847f, 
 	0.667979f, 1.0f-0.335851f
 };
-
-int printOglError(char const* file, int line)
-{
-
-    GLenum glErr;
-    int    retCode = 0;
-
-    glErr = glGetError();
-    if (glErr != GL_NO_ERROR)
-    {
-        printf("glError in file %s @ line %d: %s\n",
-			     file, line, gluErrorString(glErr));
-        retCode = 1;
-    }
-    return retCode;
-}
-
-#define printOpenGLError() printOglError(__FILE__, __LINE__)
 
 int main(void)
 {
@@ -328,7 +261,7 @@ int main(void)
     glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_TRUE);
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
     glfwSetCharCallback(window, &Input::glfw_character_callback);
     glfwSetKeyCallback(window, &Input::glfw_key_callback);
@@ -353,16 +286,10 @@ int main(void)
         lib->func(lua_state);
         lua_settop(lua_state, 0);
     }*/
-        
-    lua_pushcfunction(lua_state, lua_triangle);
-    lua_setglobal(lua_state, "triangle");
     
     lua_pushcfunction(lua_state, lua_set_camera);
     lua_setglobal(lua_state, "camera");
-    
-    lua_pushcfunction(lua_state, lua_draw);
-    lua_setglobal(lua_state, "draw");
-    
+        
     lua_pushcfunction(lua_state, lua_drawcube);
     lua_setglobal(lua_state, "drawblock");
     
@@ -373,39 +300,11 @@ int main(void)
     run(lua_state, "block.lua");
     run(lua_state, "load.lua");
     
-    printOpenGLError();
-    cout << "Shader Loading" << endl;
-    Shader shader("simple");
-    cout << "Shader loaded." << endl;
-    printOpenGLError();
-    
-    GLuint texture = load_texture();
-	GLuint TextureID  = glGetUniformLocation(shader.id(), "myTextureSampler");
-    
-  	GLuint mvpId = glGetUniformLocation(shader.id(), "MVP"); 	
-    glm::mat4 mvp = camera.get_projection() * camera.get_view();
-    
-    printOpenGLError();
-    cout << "Lets do the buffers" << endl;
-    // first arrays
-	GLuint VertexArrayID;
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
-    // vert buffer
-  	GLuint vertexbuffer;
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-    // uv buffer
-	GLuint uvbuffer;
-	glGenBuffers(1, &uvbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
-    cout << "Did the buffers" << endl;
-    
+    rc = new RenderCube("assets/textures/dirt.jpg");
+        
     cout << "Starting main loop" << endl;
     
-    float angle = 0;
+    glm::vec3 size = glm::vec3(2);
                
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -420,64 +319,11 @@ int main(void)
         
         // update view and projection
         camera.update(window);
-
-        /* OLD WAY 
-        // load projection from camera
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glMultMatrixf(glm::value_ptr( camera.get_projection() ));
-
-        // load view from camera
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glMultMatrixf(glm::value_ptr( camera.get_view() ));
-        /* OLD WAY */
         
-        /* NEW WAY */
-        angle += 0.1f;
-        glm::mat4 model = glm::rotate(
-            glm::mat4(1.0f),
-            angle,
-            glm::vec3(0.0f, 1.0f, 0.0f)
-        );
-        mvp = camera.get_projection() * camera.get_view() * model;
-   		glUniformMatrix4fv(mvpId, 1, GL_FALSE, &mvp[0][0]);
-   		
-		// Bind our texture in Texture Unit 0
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		// Set our "myTextureSampler" sampler to user Texture Unit 0
-		glUniform1i(TextureID, 0);
-   		
-        glUseProgram(shader.id());
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glVertexAttribPointer(
-            0,
-            3,
-            GL_FLOAT,
-            GL_FALSE,
-            0,
-            (void*)0
-        );
-        
-		// 2nd attribute buffer : UVs
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-		glVertexAttribPointer(
-			1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-			2,                                // size : U+V => 2
-			GL_FLOAT,                         // type
-			GL_FALSE,                         // normalized?
-			0,                                // stride
-			(void*)0                          // array buffer offset
-		);
-
-        glDrawArrays(GL_TRIANGLES, 0, 12*3);
-        glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-        /* NEW WAY */
-        
+        for(int x = -size.x; x < size.x; x++)
+            for(int y = -size.y; y < size.y; y++)
+                for(int z = -size.z; z < size.z; z++)
+                    rc->draw(&camera, glm::vec3(x, y, z));
 
         if(glfwGetKey(window, 'U'))
             run(lua_state, "action.lua");
@@ -487,7 +333,7 @@ int main(void)
         
         if(glfwGetKey(window, 'F'))
             std::cout << "FPS: " << calcFPS(glfwGetTime()) << std::endl;
-        if(glfwGetKey(window, 'S'))
+        if(glfwGetKey(window, 'Q'))
             screenshot();
         
         /* Swap front and back buffers */
@@ -496,9 +342,8 @@ int main(void)
         glfwPollEvents();
     }
 	// Cleanup VBO and shader
-	glDeleteBuffers(1, &vertexbuffer);
-	glDeleteProgram(shader.id());
-	glDeleteVertexArrays(1, &VertexArrayID);
+	//glDeleteBuffers(1, &vertexbuffer);
+	//glDeleteProgram(shader.id());
     
     // close the Lua state
     lua_close(lua_state);

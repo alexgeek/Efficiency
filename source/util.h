@@ -8,7 +8,8 @@ extern "C" {
 
 double calcFPS(double time);
 void glfw_error_callback(int error, const char* description);
-int load_texture();
+int load_texture(const char*);
+int load_texture_cube(const char*);
 int screenshot();
 
 #ifdef __cplusplus

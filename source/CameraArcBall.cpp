@@ -50,4 +50,15 @@ void CameraArcBall::update(GLFWwindow* window)
         position_ += move_speed_ * glm::normalize(target_ - position_);
     if(glfwGetKey(window, 'S'))
         position_ -= move_speed_ * glm::normalize(target_ - position_);
+    glm::vec3 strafe = move_speed_ * glm::cross(glm::normalize(target_ - position_), up_);
+    if(glfwGetKey(window, 'A'))
+    {
+        position_ -= strafe;
+        target_ -= strafe;
+    }
+    if(glfwGetKey(window, 'D'))
+    {
+        position_ += strafe;
+        target_ += strafe;
+    }   
 }
