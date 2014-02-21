@@ -37,34 +37,16 @@ void RenderQuad::init(string texture)
 
 void RenderQuad::draw(Camera* camera, glm::vec3 position)
 {
-    cout << "[draw]" << endl;
-    printOpenGLError();
-
     glUseProgram(shader_.id());
-    
-    cout << "[use]" << endl;
-    printOpenGLError();
-    
+
     mvp_ = camera->get_projection() * camera->get_view() * glm::translate(glm::mat4(1.0f), position);
 	glUniformMatrix4fv(glGetUniformLocation(shader_.id(), "MVP"), 1, GL_FALSE, &mvp_[0][0]);
 	
   	glUniform1f(glGetUniformLocation(shader_.id(), "globaltime"), glfwGetTime());
   	
-  		
-	        cout << "[MAIN!]" << endl;
-        printOpenGLError();
-  	
+
 	glActiveTexture(GL_TEXTURE0);
-	
-		
-	        cout << "[x]" << endl;
-        printOpenGLError();
-	
 	glBindTexture(GL_TEXTURE_2D, texture_id_);
-	
-		
-        cout << "[MAIN]" << endl;
-        printOpenGLError();
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id_);

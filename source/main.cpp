@@ -329,9 +329,6 @@ int main(void)
         //glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT /*| GL_STENCIL_BUFFER_BIT*/);
         
-        cout << "[maiAAAn]" << endl;
-        printOpenGLError();
-                
         // update input and actions
         Input::instance().update(window);
         
@@ -342,28 +339,15 @@ int main(void)
             run(lua_state, "action.lua");
         
         run(lua_state, "update.lua");
-        
-        cout << "[render]" << endl;
-        printOpenGLError();
-        
         run(lua_state, "render.lua");
-        
-        cout << "[postrender]" << endl;
-        printOpenGLError();
         
         if(glfwGetKey(window, 'F'))
             std::cout << "FPS: " << calcFPS(glfwGetTime()) << std::endl;
         if(glfwGetKey(window, 'Q'))
             screenshot();
             
-                cout << "[maaaain]" << endl;
-        printOpenGLError();
-            
         quad.draw(camera, glm::vec3(0, 0, 0));
         
-                cout << "[afterquad]" << endl;
-        printOpenGLError();
-
         if(glfwGetKey(window, GLFW_KEY_ENTER))
             rect.draw(camera, glm::vec2(width, height));
 
@@ -377,8 +361,6 @@ int main(void)
         }}}
         
         batch.render(camera);
-
-        //renderer[0]->draw(camera, glm::vec3(0,0,0));
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

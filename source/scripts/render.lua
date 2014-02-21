@@ -7,3 +7,4 @@ for id, entity in pairs(world.entities) do
         end
     end
 end
+if drawbatch then drawbatch() end
