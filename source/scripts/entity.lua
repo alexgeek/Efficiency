@@ -7,7 +7,7 @@ function entity(name)
   e.name = name or "entity_" .. e.id
   e.update = function () end
   e.action = function() end
-  e.add = function(c) table.insert(e.components, c); c.owner = e end
+  e.add = function(c) table.insert(e.components, c); c.owner = e; return e end
   e.get = function(name) for i, component in pairs(e.components) do if component.name == name then return component end end end
   e.x = 0
   e.y = 0

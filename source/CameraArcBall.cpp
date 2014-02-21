@@ -46,10 +46,14 @@ void CameraArcBall::update(GLFWwindow* window)
             position_ = glm::rotate(position_ - target_, rotate_speed_ * (float)mouse_delta.x, camera_up) + target_;
     }
     
+    // forward    
     if(glfwGetKey(window, 'W'))
         position_ += move_speed_ * glm::normalize(target_ - position_);
+    // back
     if(glfwGetKey(window, 'S'))
         position_ -= move_speed_ * glm::normalize(target_ - position_);
+    
+    // side to side
     glm::vec3 strafe = move_speed_ * glm::cross(glm::normalize(target_ - position_), up_);
     if(glfwGetKey(window, 'A'))
     {
@@ -60,5 +64,18 @@ void CameraArcBall::update(GLFWwindow* window)
     {
         position_ += strafe;
         target_ += strafe;
-    }   
+    } 
+    
+    // up and down
+    glm::vec3 vert = move_speed_ * up_;
+    if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))
+    {
+        position_ -= vert;
+        target_ -= vert;
+    }
+    if(glfwGetKey(window, GLFW_KEY_SPACE))
+    {
+        position_ += vert;
+        target_ += vert;
+    } 
 }

@@ -5,8 +5,10 @@ in vec3 position;
 
 // Values that stay constant for the whole mesh.
 uniform samplerCube tex;
+uniform float globaltime;
 
-void main() {
-	// Output color = color of the texture at the specified UV
+void main( void )
+{
 	color = texture(tex, position);
 }
+

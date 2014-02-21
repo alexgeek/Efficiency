@@ -26,21 +26,64 @@ player.action = function() player.get("sword"):attack() end
 world.add(victim)
 world.add(player)
 
-local size = 2
-local ctr = 0
+
+local size = 4
 for x = -size, size do
   for y = -size, 0 do
     for z = -size, size do
       local b = entity("block<" .. tostring(x) .. "," .. tostring(y) .. "," .. tostring(z) .. ">")
-      b.add(Block())
+      if math.random(10) < 3 then b.add(blocks["grass"]) else b.add(blocks["stone"]) end
       b.x = x
-      b.y = y - 5
+      b.y = y
       b.z = z
-      --b.tick = math.abs(x) + y + math.abs(z)
-      --b.tick = b.tick * 20
-      --b.action = function(b) b.tick = b.tick - 1; if b.tick <= 0 then world.remove(b) end end
-      if y <= -2 or ctr == 0 then world.add(b) end
-      ctr = (ctr + 1) % 2
+      --b.tick = math.abs(x) + math.abs(y) + math.abs(z)
+      --b.tick = b.id
+      --b.tick = b.tick * 2
+      --b.update = function(b) b.tick = b.tick - 1; if b.tick <= 0 then world.remove(b) end end
+      world.add(b)
+      
     end
   end
 end
+
+for x = -size, size do
+for y = 0, 9 do
+for z = -size, size do
+    local iceblock = entity("block<" .. tostring(x) .. "," .. tostring(y) .. "," .. tostring(z) .. ">")
+    local grassblock = entity("block<" .. tostring(x) .. "," .. tostring(y) .. "," .. tostring(z+1) .. ">")
+
+    iceblock.x = x
+    iceblock.y = y
+    iceblock.z = z
+
+    if math.abs(x) == math.abs(size) or math.abs(z) == math.abs(size) then 
+        if math.abs(x) == math.abs(z) then 
+            iceblock.add(blocks["templebrick"])
+        else
+            iceblock.add(blocks["icebrick"])
+        end
+        world.add(iceblock) 
+    end
+end end end
+
+--[[
+local iceblock = entity()
+local grassblock = entity()
+iceblock.z = 2
+iceblock.add(blocks["icebrick"])
+grassblock.z = -2
+grassblock.add(blocks["grass"])
+--world.add(iceblock)
+world.add(grassblock)
+world.add(entity().add(blocks["stone"]))
+local foo = entity().add(blocks["stone"])
+foo.y = -2
+world.add(foo)
+local foo2 = entity().add(blocks["stone"])
+foo2.z = 2
+world.add(foo2)
+local foo3 = entity("fucker").add(blocks["icebrick"])
+foo3.y = 2
+world.add(foo3)
+
+--]]

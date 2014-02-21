@@ -10,8 +10,10 @@
 class RenderCube
 {
     public:
+        RenderCube(string right, string left, string top, string bottom, string back, string front);
+        RenderCube(string top, string sides);
         RenderCube(string texture);
-        void init(string texture);
+        void init(string right, string left, string top, string bottom, string back, string front);
         void draw(Camera* camera, glm::vec3 position);
     protected:
         Shader shader_;

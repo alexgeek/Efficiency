@@ -67,22 +67,15 @@ int load_texture(const char* file)									// Load Bitmaps And Convert To Textur
 }
 
 // http://antongerdelan.net/opengl/cubemaps.html
-int load_texture_cube(const char* file)
+int load_texture_cube(const char* right, const char* left, const char* top, const char* bottom, const char* back, const char* front)
 {
-    #define FRONT "grass.jpg"
-    #define BACK "assets/textures/dirt.jpg"
-    #define TOP "assets/textures/dullgrass.jpg"
-    #define BOTTOM "grass.jpg"
-    #define LEFT "grass.jpg"
-    #define RIGHT "grass.jpg"
-
     GLuint texture = SOIL_load_OGL_cubemap (
-      file,
-      file,
-      TOP,
-      file,
-      file,
-      file,
+      right,
+      left,
+      top,
+      bottom,
+      back,
+      front,
       SOIL_LOAD_RGB,
       SOIL_CREATE_NEW_ID,
       0

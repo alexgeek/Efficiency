@@ -8,7 +8,7 @@
 class Render
 {
     public:
-        virtual void render() = 0;
+        virtual void draw(Camera* camera, glm::vec3 position) = 0;
     protected:
     private:
 };

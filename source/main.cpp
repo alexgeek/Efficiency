@@ -3,6 +3,7 @@
 #include "lua.hpp"
 // c++
 #include <vector>
+#include <stack>
 #include <string>
 // glm
 #include <glm/gtx/string_cast.hpp>
@@ -15,8 +16,10 @@
 // c files
 #include "util.h"
 
+// temp globals
+Camera* camera;
+vector<RenderCube*> renderer;
 
-CameraArcBall camera(glm::vec3(5,5,5), glm::vec3(0,0,0));
 int lua_set_camera(lua_State *l)
 {
     int argc = lua_gettop(l);
@@ -34,13 +37,47 @@ int lua_set_camera(lua_State *l)
         position[2-i] = lua_tonumber(l, lua_gettop(l));
         lua_pop(l, 1);
     }
-    
-    camera = CameraArcBall(position, target);
+    delete camera;
+    camera = new CameraArcBall(position, target);
     //std::cout << "Camera: " << argc << std::endl << glm::to_string(position) << ", " << glm::to_string(target) << std::endl;
     return 0;
 }
 
-RenderCube* rc;
+int lua_load_renderer(lua_State *l)
+{
+    stack<string> textures;
+    int argc = lua_gettop(l);
+    for(int i = 0; i < argc; i++)
+    {
+        textures.push(lua_tostring(l, lua_gettop(l)));
+        lua_pop(l, 1);
+    }
+    switch(argc)
+    {
+        case 1:
+        {
+            string texture = textures.top();
+            renderer.push_back(new RenderCube(texture));
+            lua_pushnumber(l, renderer.size()-1);
+            return 1;
+        }
+        case 2:      
+        {
+            string top, sides;      
+            sides = textures.top();
+            textures.pop();
+            top = textures.top();
+            textures.pop();
+            RenderCube* rc = new RenderCube(top, sides);
+            renderer.push_back(rc);
+            lua_pushnumber(l, renderer.size()-1);
+            return 1;
+        }
+        break;
+    }
+    return 0;
+}
+
 int lua_drawcube(lua_State *l)
 {
     int argc = lua_gettop(l);
@@ -48,59 +85,13 @@ int lua_drawcube(lua_State *l)
     for(int i = 0; i < 3; i++)
     {
         position[2-i] = lua_tonumber(l, lua_gettop(l));
-        lua_pop(l, 1);        
+        lua_pop(l, 1);
     }
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glTranslated(position.x, position.y, position.z);
     
-    const float s = 0.5f;
-
-    glBegin(GL_QUADS);
-
-    // top
-    glColor3d(0.6, 0.4, 0.3);
-    glVertex3f(-s, s, -s);
-    glVertex3f(-s, s, s);
-    glVertex3f(s, s, s);
-    glVertex3f(s, s, -s);
+    int renderer_id = lua_tointeger(l, lua_gettop(l));
+    lua_pop(l, 1);    
     
-    // bottom
-    glColor3d(0.1, 0.2, 0.2);
-    glVertex3f(-s, -s, -s);
-    glVertex3f(s, -s, -s);
-    glVertex3f(s, -s, s);
-    glVertex3f(-s, -s, s);
-    
-    // front
-    glColor3d(0.75, 0, 0);
-    glVertex3f(-s, -s, s);
-    glVertex3f(s, -s, s);
-    glVertex3f(s, s, s);
-    glVertex3f(-s, s, s);
-    
-    // back
-    glColor3d(0, 0.75, 0);
-    glVertex3f(-s, s, -s);
-    glVertex3f(s, s, -s);
-    glVertex3f(s, -s, -s);
-    glVertex3f(-s, -s, -s);
-    
-    // right
-    glVertex3f(s, -s, s);
-    glVertex3f(s, -s, -s);
-    glVertex3f(s, s, -s);
-    glVertex3f(s, s, s);
-    
-    // left
-    glVertex3f(-s, s, s);
-    glVertex3f(-s, s, -s);
-    glVertex3f(-s, -s, -s);
-    glVertex3f(-s, -s, s);
-
-    glEnd();
-    glPopMatrix();
-    //std::cout << "Cube: " << argc << std::endl << glm::to_string(position) <<std::endl;
+    renderer[renderer_id]->draw(camera, position);
     
     return 0;
 }
@@ -248,15 +239,16 @@ int main(void)
     printOpenGLError();
             
     // get version info
-    const GLubyte* renderer = glGetString (GL_RENDERER); // get renderer string
-    const GLubyte* version = glGetString (GL_VERSION); // version as a string
-    printf ("Renderer: %s\n", renderer);
-    printf ("OpenGL version supported %s\n", version);
+    const GLubyte* gl_renderer = glGetString (GL_RENDERER); // get renderer string
+    const GLubyte* gl_version = glGetString (GL_VERSION); // version as a string
+    printf ("Renderer: %s\n", gl_renderer);
+    printf ("OpenGL version supported %s\n", gl_version);
     
     printOpenGLError();
     cout << "Setting GL" << endl;
         
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    //glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClearColor(0.9f, 0.9f, 0.99f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
@@ -293,6 +285,9 @@ int main(void)
     lua_pushcfunction(lua_state, lua_drawcube);
     lua_setglobal(lua_state, "drawblock");
     
+    lua_pushcfunction(lua_state, lua_load_renderer);
+    lua_setglobal(lua_state, "load_renderer");
+    
     run(lua_state, "class.lua");
     run(lua_state, "entity.lua");
     run(lua_state, "world.lua");
@@ -300,17 +295,20 @@ int main(void)
     run(lua_state, "block.lua");
     run(lua_state, "load.lua");
     
-    rc = new RenderCube("assets/textures/dirt.jpg");
+    camera = new CameraArcBall(glm::vec3(5,5,5), glm::vec3(0,0,0));
+    
+    //renderer.push_back(new RenderCube("assets/textures/grass.jpg", "assets/textures/dirt.jpg"));
         
     cout << "Starting main loop" << endl;
     
     glm::vec3 size = glm::vec3(2);
-               
+    
     /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE))
     {
+        glfwGetWindowSize(window, &width, &height);
         glViewport(0, 0, width, height);
-
+        
         //glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT /*| GL_STENCIL_BUFFER_BIT*/);
         
@@ -318,13 +316,8 @@ int main(void)
         Input::instance().update(window);
         
         // update view and projection
-        camera.update(window);
+        camera->update(window);
         
-        for(int x = -size.x; x < size.x; x++)
-            for(int y = -size.y; y < size.y; y++)
-                for(int z = -size.z; z < size.z; z++)
-                    rc->draw(&camera, glm::vec3(x, y, z));
-
         if(glfwGetKey(window, 'U'))
             run(lua_state, "action.lua");
         
