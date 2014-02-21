@@ -8,6 +8,7 @@
 class Shader
 {
     public:
+        Shader(string vertex, string fragment);
         Shader(string name);
         int id();
     protected:

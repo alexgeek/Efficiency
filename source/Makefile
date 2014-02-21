@@ -15,7 +15,7 @@ LIBA = libs/libglfw3.a libs/libdrawtext.a libs/libSOIL.a
 LIBS = -lGLEW -lGL -lGLU -lfreetype -lX11 -lXxf86vm -lXrandr -lpthread -lXi -llua -ldl
 
 # Source files for project
-SRCS = main.cpp Input.cpp Window.cpp Triangle.cpp Camera.cpp CameraArcBall.cpp Shader.cpp RenderCube.cpp Debug.cpp
+SRCS = main.cpp Input.cpp Window.cpp Triangle.cpp Camera.cpp CameraArcBall.cpp Shader.cpp RenderCube.cpp RenderQuad.cpp RenderRect.cpp BatchedRenderCube.cpp Debug.cpp
 CSRC = util.c
 
 # Get object names from source names
@@ -30,6 +30,7 @@ MAIN = game
 
 all:    $(MAIN)
 	@echo  Project Compiled
+	./$(MAIN)
 
 $(MAIN): $(OBJS)	$(COBJS)
 	$(CP) $(CFLAGS) $(INCLUDES) $(COBJS) $(OBJS) $(LIBA) $(LIBS) -o $(MAIN)

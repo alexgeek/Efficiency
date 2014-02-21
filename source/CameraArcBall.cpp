@@ -2,7 +2,7 @@
 
 const glm::vec3 CameraArcBall::up_ = glm::vec3(0, 1.0f, 0);
 const float CameraArcBall::rotate_speed_ = 0.15f;
-const float CameraArcBall::move_speed_ = 0.15f;
+const float CameraArcBall::move_speed_ = 5.0f;
 
 CameraArcBall::CameraArcBall(glm::vec3 position, glm::vec3 target) :
     position_(position),
@@ -28,6 +28,10 @@ glm::mat4 CameraArcBall::get_view()
 // http://gamedev.stackexchange.com/questions/53333/how-to-implement-a-basic-arcball-camera-in-opengl-with-glm
 void CameraArcBall::update(GLFWwindow* window)
 {
+    float now = glfwGetTime();
+    float delta = now - time_;
+    time_ = now;
+    
     // get difference between last mouse coordinates and current
     glm::dvec2 mouse_delta = mouse_;
     glfwGetCursorPos(window, &mouse_.x, &mouse_.y);
@@ -48,13 +52,13 @@ void CameraArcBall::update(GLFWwindow* window)
     
     // forward    
     if(glfwGetKey(window, 'W'))
-        position_ += move_speed_ * glm::normalize(target_ - position_);
+        position_ += move_speed_ * glm::normalize(target_ - position_) * delta;
     // back
     if(glfwGetKey(window, 'S'))
-        position_ -= move_speed_ * glm::normalize(target_ - position_);
+        position_ -= move_speed_ * glm::normalize(target_ - position_) * delta;
     
     // side to side
-    glm::vec3 strafe = move_speed_ * glm::cross(glm::normalize(target_ - position_), up_);
+    glm::vec3 strafe = move_speed_ * glm::cross(glm::normalize(target_ - position_), up_) * delta;
     if(glfwGetKey(window, 'A'))
     {
         position_ -= strafe;
@@ -67,7 +71,7 @@ void CameraArcBall::update(GLFWwindow* window)
     } 
     
     // up and down
-    glm::vec3 vert = move_speed_ * up_;
+    glm::vec3 vert = move_speed_ * up_ * delta;
     if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))
     {
         position_ -= vert;

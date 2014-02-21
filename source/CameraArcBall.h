@@ -21,6 +21,7 @@ class CameraArcBall : public Camera
         const static float move_speed_;
     private:
         glm::dvec2 mouse_;
+        float time_;
 };
 
 #endif // CAMERAARCBALL_H

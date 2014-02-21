@@ -13,6 +13,9 @@
 #include "Input.h"
 #include "Shader.h"
 #include "RenderCube.h"
+#include "BatchedRenderCube.h"
+#include "RenderQuad.h"
+#include "RenderRect.h"
 // c files
 #include "util.h"
 
@@ -195,9 +198,9 @@ int main(void)
         return 1;
     }
 
-//	glfwWindowHint(GLFW_SAMPLES, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     // to use this: http://stackoverflow.com/questions/17923782/simple-opengl-image-library-soil-uses-deprecated-functionality
 //	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); 
@@ -205,9 +208,9 @@ int main(void)
 
     /*glfwWindowHint(GLFW_SAMPLES, 1); // 2x antialiasing
     int stencil_bits = 8;
-    glfwWindowHint(GLFW_ALPHA_BITS, 8);
+
     glfwWindowHint(GLFW_STENCIL_BITS, 8); // request a stencil buffer for object selection*/
-    
+    glfwWindowHint(GLFW_ALPHA_BITS, 8);
     
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(width, height, "Game", NULL, NULL);
@@ -215,7 +218,7 @@ int main(void)
     if (!window)
     {
         glfwTerminate();
-        return -1;
+        return -1; 
     }
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
@@ -241,8 +244,13 @@ int main(void)
     // get version info
     const GLubyte* gl_renderer = glGetString (GL_RENDERER); // get renderer string
     const GLubyte* gl_version = glGetString (GL_VERSION); // version as a string
+    int gl_alpha;
+    glGetIntegerv(GL_ALPHA_BITS, &gl_alpha);
     printf ("Renderer: %s\n", gl_renderer);
     printf ("OpenGL version supported %s\n", gl_version);
+    printf ("Alphabits: %d", gl_alpha);
+    
+    glfwSwapInterval(0);
     
     printOpenGLError();
     cout << "Setting GL" << endl;
@@ -251,8 +259,9 @@ int main(void)
     glClearColor(0.9f, 0.9f, 0.99f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glClearDepth(1.0f);
-    glDepthFunc(GL_LEQUAL);
-    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS);
+	glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_CULL_FACE);
 
     glfwSetCharCallback(window, &Input::glfw_character_callback);
@@ -295,13 +304,19 @@ int main(void)
     run(lua_state, "block.lua");
     run(lua_state, "load.lua");
     
-    camera = new CameraArcBall(glm::vec3(5,5,5), glm::vec3(0,0,0));
+    //camera = new CameraArcBall(glm::vec3(5,5,5), glm::vec3(0,0,0));
     
     //renderer.push_back(new RenderCube("assets/textures/grass.jpg", "assets/textures/dirt.jpg"));
         
-    cout << "Starting main loop" << endl;
+    cout << "Starting main loop:" << endl;
     
     glm::vec3 size = glm::vec3(2);
+    
+    RenderQuad quad("assets/textures/jap.png", "inversion");
+    RenderRect rect("assets/textures/tex16.png", "galaxy");
+    
+    BatchedRenderCube batch("assets/textures/dirt.jpg");
+    
     
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE))
@@ -311,7 +326,7 @@ int main(void)
         
         //glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT /*| GL_STENCIL_BUFFER_BIT*/);
-        
+                
         // update input and actions
         Input::instance().update(window);
         
@@ -328,6 +343,23 @@ int main(void)
             std::cout << "FPS: " << calcFPS(glfwGetTime()) << std::endl;
         if(glfwGetKey(window, 'Q'))
             screenshot();
+            
+        
+            
+        /*quad.draw(camera, glm::vec3(0, 0, 0));
+        if(glfwGetKey(window, GLFW_KEY_ENTER))
+            rect.draw(camera, glm::vec2(width, height));*/
+
+        const int start = -16;
+        const int end = 16;
+        for(int x = start; x < end; x+=1)
+        for(int y = 4*start; y < end; y+=1)
+        for(int z = start; z < end; z+=1)
+        {{{
+        batch.buffer_position(glm::vec3(x,y,z));
+        }}}
+        batch.render(camera);
+        //renderer[0]->draw(camera, glm::vec3(0,0,0));
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

@@ -1,10 +1,14 @@
 #include "Shader.h"
 
-Shader::Shader(string name)
+Shader::Shader(string vertex, string fragment)
 {
-    vertex_shader_file_ = name; vertex_shader_file_ += ".vs";
-    fragment_shader_file_ = name; fragment_shader_file_ += ".fs";
+    vertex_shader_file_ = vertex; vertex_shader_file_ += ".vs";
+    fragment_shader_file_ = fragment; fragment_shader_file_ += ".fs";
     program_id_ = load_program(vertex_shader_file_.c_str(), fragment_shader_file_.c_str());
+}
+
+Shader::Shader(string name) : Shader(name, name)
+{
 }
 
 int Shader::id()

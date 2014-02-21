@@ -13,7 +13,7 @@ function dump(t, level)
 end
 
 -- camera setup
-camera(4, 4, 3,
+camera(20, 5, 20,
       0, 0, 0);
 
 -- initial scene set up
@@ -27,7 +27,8 @@ world.add(victim)
 world.add(player)
 
 
-local size = 4
+local size = 0
+--[[
 for x = -size, size do
   for y = -size, 0 do
     for z = -size, size do
@@ -45,9 +46,9 @@ for x = -size, size do
     end
   end
 end
-
+--]]
 for x = -size, size do
-for y = 0, 9 do
+for y = 5, 9 do
 for z = -size, size do
     local iceblock = entity("block<" .. tostring(x) .. "," .. tostring(y) .. "," .. tostring(z) .. ">")
     local grassblock = entity("block<" .. tostring(x) .. "," .. tostring(y) .. "," .. tostring(z+1) .. ">")

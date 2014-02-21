@@ -86,7 +86,6 @@ void RenderCube::draw(Camera* camera, glm::vec3 position)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id_);
 
-
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id_);
     glVertexAttribPointer(
