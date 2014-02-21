@@ -78,13 +78,15 @@ void BatchedRenderCube::init(string right, string left, string top, string botto
     
     glGenBuffers(1, &position_buffer_id_);
     glBindBuffer(GL_ARRAY_BUFFER, position_buffer_id_);
-    glBufferData(GL_ARRAY_BUFFER, 10000 * sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, MAX_BLOCKS * sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
     cout << "Finish batch init" << endl;
     printOpenGLError();
 }
 
 void BatchedRenderCube::prepare(Camera* camera)
 {
+    cout << "[prep]" << endl;
+    printOpenGLError();
     glUseProgram(shader_.id());
     
     mv_ = camera->get_projection() * camera->get_view();
@@ -95,10 +97,17 @@ void BatchedRenderCube::prepare(Camera* camera)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id_);
 	
+    cout << "[batches]" << endl;
+    printOpenGLError();
+	
+	
+	
 	glBindBuffer(GL_ARRAY_BUFFER, position_buffer_id_);
-	glBufferData(GL_ARRAY_BUFFER, 10000 * sizeof(glm::vec3), NULL, GL_STREAM_DRAW); // Buffer orphaning
-
+	glBufferData(GL_ARRAY_BUFFER, MAX_BLOCKS * sizeof(glm::vec3), NULL, GL_STREAM_DRAW); // Buffer orphaning
+    cout << positions_.size() << "*" << sizeof(glm::vec3) << " = " << positions_.size() * sizeof(glm::vec3) << endl;
 	glBufferSubData(GL_ARRAY_BUFFER, 0, positions_.size() * sizeof(glm::vec3), &positions_[0]);
+    cout << "[batch]" << endl;
+    printOpenGLError();
 }
 
 

@@ -8,6 +8,8 @@
 #include "Shader.h"
 #include "Camera.h"
 
+#define MAX_BLOCKS 20000
+
 class BatchedRenderCube
 {
     public:

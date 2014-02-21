@@ -317,6 +317,8 @@ int main(void)
     
     BatchedRenderCube batch("assets/textures/dirt.jpg");
     
+    cout << "[initmain]" << endl;
+    printOpenGLError();
     
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE))
@@ -326,6 +328,9 @@ int main(void)
         
         //glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT /*| GL_STENCIL_BUFFER_BIT*/);
+        
+        cout << "[maiAAAn]" << endl;
+        printOpenGLError();
                 
         // update input and actions
         Input::instance().update(window);
@@ -337,28 +342,42 @@ int main(void)
             run(lua_state, "action.lua");
         
         run(lua_state, "update.lua");
+        
+        cout << "[render]" << endl;
+        printOpenGLError();
+        
         run(lua_state, "render.lua");
+        
+        cout << "[postrender]" << endl;
+        printOpenGLError();
         
         if(glfwGetKey(window, 'F'))
             std::cout << "FPS: " << calcFPS(glfwGetTime()) << std::endl;
         if(glfwGetKey(window, 'Q'))
             screenshot();
             
-        
+                cout << "[maaaain]" << endl;
+        printOpenGLError();
             
-        /*quad.draw(camera, glm::vec3(0, 0, 0));
-        if(glfwGetKey(window, GLFW_KEY_ENTER))
-            rect.draw(camera, glm::vec2(width, height));*/
+        quad.draw(camera, glm::vec3(0, 0, 0));
+        
+                cout << "[afterquad]" << endl;
+        printOpenGLError();
 
-        const int start = -16;
-        const int end = 16;
+        if(glfwGetKey(window, GLFW_KEY_ENTER))
+            rect.draw(camera, glm::vec2(width, height));
+
+        const int start = -4;
+        const int end = 4;
         for(int x = start; x < end; x+=1)
         for(int y = 4*start; y < end; y+=1)
         for(int z = start; z < end; z+=1)
         {{{
         batch.buffer_position(glm::vec3(x,y,z));
         }}}
+        
         batch.render(camera);
+
         //renderer[0]->draw(camera, glm::vec3(0,0,0));
         
         /* Swap front and back buffers */

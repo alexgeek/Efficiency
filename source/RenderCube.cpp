@@ -67,10 +67,11 @@ void RenderCube::init(string right, string left, string top, string bottom, stri
     
   	mvp_ = glm::mat4(1.0f);
   	mvp_id_ = glGetUniformLocation(shader_.id(), "MVP");
-  	
+
     glGenBuffers(1, &vertex_buffer_id_);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id_);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertex_buffer_data), cube_vertex_buffer_data, GL_STATIC_DRAW);
+    
 }
 
 
