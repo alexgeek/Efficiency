@@ -7,6 +7,11 @@ function Block:render(x, y, z)
     drawblock(self.renderer, x, y, z)
 end
 
+function Block:on_break(x, y, z)
+    if self.itemdrop then print("Dropping " .. self.itemdrop .. " at " .. x .. y .. z) end
+end
+
+
 RenderBlock = class(Block, function(rb)
     rb.name = "renderblock"
 end)
@@ -40,6 +45,12 @@ TempleBrickBlock = class(RenderBlock, function(ib)
     ib.renderer = load_renderer("assets/textures/jap.png")
 end)
 
+HellStoneBlock = class(RenderBlock, function(ib)
+    ib.name = "hellstone"
+    ib.renderer = load_renderer("assets/textures/hellstone.png")
+end)
+
+
 -- if Block["stone"]:opaque then Block["stone"]:render(x, y, z) end
 
 blocks = {}
@@ -54,3 +65,4 @@ add_block(DirtBlock())
 add_block(GrassBlock())
 add_block(IceBrickBlock())
 add_block(TempleBrickBlock())
+add_block(HellStoneBlock())

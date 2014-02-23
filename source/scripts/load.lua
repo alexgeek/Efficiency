@@ -1,19 +1,5 @@
-function dump(t, level)
-  level = level or 0
-  for i,v in pairs(t) do
-    io.write(string.rep('  ', level))
-    io.write(i..': ')
-    if type(v) == 'table' then
-      print ''
-      dump(v, level + 1)
-    else
-      print(tostring(v))
-    end
-  end
-end
-
 -- camera setup
-camera(20, 5, 20,
+camera(5, 5, 5,
       0, 0, 0);
 
 -- initial scene set up
@@ -27,13 +13,12 @@ world.add(victim)
 world.add(player)
 
 
-local size = 0
---[[
+local size = 8
 for x = -size, size do
-  for y = -size, 0 do
+  for y = -size*4, 0 do
     for z = -size, size do
       local b = entity("block<" .. tostring(x) .. "," .. tostring(y) .. "," .. tostring(z) .. ">")
-      if math.random(10) < 3 then b.add(blocks["grass"]) else b.add(blocks["stone"]) end
+      if math.random(-y+1) < 3 then b.add(blocks["grass"]) else b.add(blocks["stone"]) end
       b.x = x
       b.y = y
       b.z = z
@@ -46,9 +31,9 @@ for x = -size, size do
     end
   end
 end
---]]
+
 for x = -size, size do
-for y = 5, 9 do
+for y = 0, 9 do
 for z = -size, size do
     local iceblock = entity("block<" .. tostring(x) .. "," .. tostring(y) .. "," .. tostring(z) .. ">")
     local grassblock = entity("block<" .. tostring(x) .. "," .. tostring(y) .. "," .. tostring(z+1) .. ">")
@@ -66,6 +51,21 @@ for z = -size, size do
         world.add(iceblock) 
     end
 end end end
+
+local hellblock = entity("actor")
+hellblock.add(blocks["hellstone"])
+local physics = Physics()
+--physics:apply_force(0, 10, 0)
+hellblock.add(physics)
+hellblock.y = 2
+hellblock.action = function() physics:apply_force(0, 2, 0) end
+hellblock.update = function() 
+    physics:update()
+    if hellblock.y < 1 then 
+        physics:apply_force(0, 0.05, 0) 
+    else physics:apply_force(0, -0.01, 0) 
+end end
+world.add(hellblock)
 
 --[[
 local iceblock = entity()

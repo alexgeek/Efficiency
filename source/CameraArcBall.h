@@ -2,6 +2,7 @@
 #define CAMERAARCBALL_H
 
 #include <iostream>
+#include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include "Camera.h"
 

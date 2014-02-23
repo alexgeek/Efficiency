@@ -55,7 +55,7 @@ void RenderRect::draw(Camera* camera, glm::vec2 resolution)
     printOpenGLError();
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id_);
+	glBindTexture(GL_TEXTURE_2D, texture_id_);
 	
   	cout << "[@4]" << endl;
     printOpenGLError();

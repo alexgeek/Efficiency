@@ -21,7 +21,7 @@
 
 // temp globals
 Camera* camera;
-vector<RenderCube*> renderer;
+vector<BatchedRenderCube*> renderer;
 
 int lua_set_camera(lua_State *l)
 {
@@ -60,7 +60,7 @@ int lua_load_renderer(lua_State *l)
         case 1:
         {
             string texture = textures.top();
-            renderer.push_back(new RenderCube(texture));
+            renderer.push_back(new BatchedRenderCube(texture));
             lua_pushnumber(l, renderer.size()-1);
             return 1;
         }
@@ -71,7 +71,7 @@ int lua_load_renderer(lua_State *l)
             textures.pop();
             top = textures.top();
             textures.pop();
-            RenderCube* rc = new RenderCube(top, sides);
+            BatchedRenderCube* rc = new BatchedRenderCube(top, sides);
             renderer.push_back(rc);
             lua_pushnumber(l, renderer.size()-1);
             return 1;
@@ -94,8 +94,17 @@ int lua_drawcube(lua_State *l)
     int renderer_id = lua_tointeger(l, lua_gettop(l));
     lua_pop(l, 1);    
     
-    renderer[renderer_id]->draw(camera, position);
+    renderer[renderer_id]->buffer_position(position);
     
+    return 0;
+}
+
+int lua_drawbatch(lua_State* l)
+{
+    int argc = lua_gettop(l);
+    for(std::vector<BatchedRenderCube*>::iterator it = renderer.begin(); it != renderer.end(); ++it) {
+        (*it)->render(camera);
+    }
     return 0;
 }
 
@@ -144,6 +153,13 @@ static const GLfloat g_vertex_buffer_data[] = {
 	-0.5f, 0.5f, 0.5f,
 	 0.5f,-0.5f, 0.5f
 };
+
+int lua_time(lua_State* l)
+{
+    int argc = lua_gettop(l);
+    lua_pushnumber(l, glfwGetTime());
+    return 1;    
+}
 
 static const GLfloat g_uv_buffer_data[] = { 
 	0.000059f, 1.0f-0.000004f, 
@@ -297,16 +313,23 @@ int main(void)
     lua_pushcfunction(lua_state, lua_load_renderer);
     lua_setglobal(lua_state, "load_renderer");
     
+    lua_pushcfunction(lua_state, lua_drawbatch);
+    lua_setglobal(lua_state, "drawbatch");
+    
+    lua_pushcfunction(lua_state, lua_time);
+    lua_setglobal(lua_state, "time");
+    
     run(lua_state, "class.lua");
     run(lua_state, "entity.lua");
     run(lua_state, "world.lua");
     run(lua_state, "component.lua");
     run(lua_state, "block.lua");
+    run(lua_state, "physics.lua");
     run(lua_state, "load.lua");
     
     //camera = new CameraArcBall(glm::vec3(5,5,5), glm::vec3(0,0,0));
     
-    //renderer.push_back(new RenderCube("assets/textures/grass.jpg", "assets/textures/dirt.jpg"));
+    //renderer.push_back(new RenderCube("assets/textures/grass.jpg", "assets/textures/dirt.jpg")); // default renderer?
         
     cout << "Starting main loop:" << endl;
     
@@ -350,17 +373,8 @@ int main(void)
         
         if(glfwGetKey(window, GLFW_KEY_ENTER))
             rect.draw(camera, glm::vec2(width, height));
-
-        const int start = -4;
-        const int end = 4;
-        for(int x = start; x < end; x+=1)
-        for(int y = 4*start; y < end; y+=1)
-        for(int z = start; z < end; z+=1)
-        {{{
-        batch.buffer_position(glm::vec3(x,y,z));
-        }}}
-        
-        batch.render(camera);
+            
+        printOpenGLError();
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
