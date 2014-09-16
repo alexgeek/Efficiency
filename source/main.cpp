@@ -266,7 +266,7 @@ int main(void)
     printf ("OpenGL version supported %s\n", gl_version);
     printf ("Alphabits: %d", gl_alpha);
     
-    glfwSwapInterval(0);
+    glfwSwapInterval(1);
     
     printOpenGLError();
     cout << "Setting GL" << endl;
