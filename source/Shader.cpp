@@ -2,8 +2,8 @@
 
 Shader::Shader(string vertex, string fragment)
 {
-    vertex_shader_file_ = vertex; vertex_shader_file_ += ".vs";
-    fragment_shader_file_ = fragment; fragment_shader_file_ += ".fs";
+    vertex_shader_file_ = vertex; vertex_shader_file_ = "assets/shaders/" + vertex_shader_file_ + ".vs"; // TODO if not already
+    fragment_shader_file_ = fragment; fragment_shader_file_ = "assets/shaders/" + fragment_shader_file_ + ".fs"; // TODO ditto
     program_id_ = load_program(vertex_shader_file_.c_str(), fragment_shader_file_.c_str());
 }
 
@@ -33,6 +33,7 @@ int Shader::load_file(string path, string& content)
 	return 0;
 }
 
+// TODO handle failure gracefully when shader not found, e.g. default shader
 int Shader::load_shader(GLuint shaderId, const char* path)
 {
 	string shaderContent;

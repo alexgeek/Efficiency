@@ -336,7 +336,7 @@ int main(void)
     glm::vec3 size = glm::vec3(2);
     
     RenderQuad quad("assets/textures/jap.png", "inversion");
-    RenderRect rect("assets/textures/tex16.png", "galaxy");
+    RenderRect rect("assets/textures/tex16.png", "inversion2");
     
     BatchedRenderCube batch("assets/textures/dirt.jpg");
     
