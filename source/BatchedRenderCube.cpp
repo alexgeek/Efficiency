@@ -1,6 +1,6 @@
 #include "BatchedRenderCube.h"
 
-static const GLfloat vertex_buffer_data[] = { 
+static const GLfloat vertex_buffer_data[] = {
 	-0.5f,-0.5f,-0.5f,
 	-0.5f,-0.5f, 0.5f,
 	-0.5f, 0.5f, 0.5f,
@@ -53,27 +53,27 @@ BatchedRenderCube::BatchedRenderCube(string texture) : BatchedRenderCube(texture
 }
 
 void BatchedRenderCube::init(string right, string left, string top, string bottom, string back, string front)
-{   
+{
     texture_id_ = load_texture_cube(
-        right.c_str(), 
-        left.c_str(), 
+        right.c_str(),
+        left.c_str(),
         top.c_str(),
-        bottom.c_str(), 
-        back.c_str(), 
+        bottom.c_str(),
+        back.c_str(),
         front.c_str()
     );
-    
+
   	mv_ = glm::mat4(1.0f);
   	mv_id_ = glGetUniformLocation(shader_.id(), "MV");
-  	
+
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
-  	
+
     glGenBuffers(1, &vertex_buffer_id_);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id_);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STATIC_DRAW);
-    
+
     glGenBuffers(1, &position_buffer_id_);
     glBindBuffer(GL_ARRAY_BUFFER, position_buffer_id_);
     glBufferData(GL_ARRAY_BUFFER, MAX_BLOCKS * sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
@@ -84,10 +84,10 @@ void BatchedRenderCube::init(string right, string left, string top, string botto
 void BatchedRenderCube::prepare(Camera* camera)
 {
     glUseProgram(shader_.id());
-    
+
     mv_ = camera->get_projection() * camera->get_view();
 	glUniformMatrix4fv(mv_id_, 1, GL_FALSE, &mv_[0][0]);
-	
+
   	glUniform1f(glGetUniformLocation(shader_.id(), "globaltime"), glfwGetTime());
 
 	glActiveTexture(GL_TEXTURE0);
@@ -110,7 +110,7 @@ void BatchedRenderCube::render(Camera* camera)
     prepare(camera);
 
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id_);  
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id_);
     glVertexAttribPointer(
         0,
         3,
@@ -130,14 +130,14 @@ void BatchedRenderCube::render(Camera* camera)
 		0,                                // stride
 		(void*)0                          // array buffer offset
 	);
-    
+
     glVertexAttribDivisor(0, 0); // particles vertices : always reuse the same 4 vertices -> 0
-	glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
+		glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
 
     glDrawArraysInstanced(GL_TRIANGLES, 0, 12*3, positions_.size());
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
-    
+
     finish();
 }
 
@@ -145,4 +145,3 @@ void BatchedRenderCube::finish()
 {
     positions_.clear();
 }
-

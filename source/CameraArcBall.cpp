@@ -31,16 +31,16 @@ void CameraArcBall::update(GLFWwindow* window)
     float now = glfwGetTime();
     float delta = now - time_;
     time_ = now;
-    
+
     // get difference between last mouse coordinates and current
     glm::dvec2 mouse_delta = mouse_;
     glfwGetCursorPos(window, &mouse_.x, &mouse_.y);
     mouse_delta -= mouse_;
 
     float pitch, yaw = 0;
-    
-    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
-    {
+
+    /*if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+    {*/
         glm::mat4 view = get_view();
         glm::vec3 camera_right = glm::vec3(view[0][0], view[1][0], view[2][0]);
         if(mouse_delta.y != 0)
@@ -48,10 +48,10 @@ void CameraArcBall::update(GLFWwindow* window)
         glm::vec3 camera_up = glm::vec3(view[0][1], view[1][1], view[2][1]);
         if(mouse_delta.x != 0)
             position_ = glm::rotate(position_ - target_, rotate_speed_ * (float)mouse_delta.x, camera_up) + target_;
-    }
-    
+    //}
+
     glm::vec3 movef = move_speed_ * glm::normalize(target_ - position_) * delta;
-    
+
     glm::vec3 pt = position_ - target_;
     float distSqr = glm::dot(pt, pt);
     // zoom in
@@ -60,8 +60,8 @@ void CameraArcBall::update(GLFWwindow* window)
     // zoom out
     if(glfwGetKey(window, '-'))
         position_ -= movef;
-        
-   
+
+
     // move forward
     if(glfwGetKey(window, 'W'))
     {
@@ -72,9 +72,9 @@ void CameraArcBall::update(GLFWwindow* window)
     if(glfwGetKey(window, 'S'))
     {
         position_ -= movef;
-        target_ -= movef;    
+        target_ -= movef;
     }
-    
+
     // side to side
     glm::vec3 strafe = move_speed_ * glm::cross(glm::normalize(target_ - position_), up_) * delta;
     if(glfwGetKey(window, 'A'))
@@ -86,8 +86,8 @@ void CameraArcBall::update(GLFWwindow* window)
     {
         position_ += strafe;
         target_ += strafe;
-    } 
-    
+    }
+
     // up and down
     glm::vec3 vert = move_speed_ * up_ * delta;
     if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))
@@ -99,5 +99,5 @@ void CameraArcBall::update(GLFWwindow* window)
     {
         position_ += vert;
         target_ += vert;
-    } 
+    }
 }

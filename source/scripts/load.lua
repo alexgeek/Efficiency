@@ -1,6 +1,6 @@
 -- camera setup
 camera(5, 5, 5,
-      0, 0, 0);
+       4.9, 4.9, 4.9);
 
 -- initial scene set up
 local player = entity("player")
@@ -23,11 +23,11 @@ for x = -size, size do
       b.y = y
       b.z = z
       --b.tick = math.abs(x) + math.abs(y) + math.abs(z)
+      --b.tick = b.tick*(b.tick+1) + 10
       --b.tick = b.id
       --b.tick = b.tick * 2
       --b.update = function(b) b.tick = b.tick - 1; if b.tick <= 0 then world.remove(b) end end
       world.add(b)
-      
     end
   end
 end
@@ -42,13 +42,13 @@ for z = -size, size do
     iceblock.y = y
     iceblock.z = z
 
-    if math.abs(x) == math.abs(size) or math.abs(z) == math.abs(size) then 
-        if math.abs(x) == math.abs(z) then 
+    if math.abs(x) == math.abs(size) or math.abs(z) == math.abs(size) then
+        if math.abs(x) == math.abs(z) then
             iceblock.add(blocks["templebrick"])
         else
             iceblock.add(blocks["icebrick"])
         end
-        world.add(iceblock) 
+        world.add(iceblock)
     end
 end end end
 
@@ -57,34 +57,14 @@ hellblock.add(blocks["hellstone"])
 local physics = Physics()
 --physics:apply_force(0, 10, 0)
 hellblock.add(physics)
-hellblock.y = 2
+hellblock.y = 10
 hellblock.action = function() physics:apply_force(0, 2, 0) end
-hellblock.update = function() 
-    physics:update()
-    if hellblock.y < 1 then 
-        physics:apply_force(0, 0.05, 0) 
-    else physics:apply_force(0, -0.01, 0) 
-end end
-world.add(hellblock)
-
 --[[
-local iceblock = entity()
-local grassblock = entity()
-iceblock.z = 2
-iceblock.add(blocks["icebrick"])
-grassblock.z = -2
-grassblock.add(blocks["grass"])
---world.add(iceblock)
-world.add(grassblock)
-world.add(entity().add(blocks["stone"]))
-local foo = entity().add(blocks["stone"])
-foo.y = -2
-world.add(foo)
-local foo2 = entity().add(blocks["stone"])
-foo2.z = 2
-world.add(foo2)
-local foo3 = entity("fucker").add(blocks["icebrick"])
-foo3.y = 2
-world.add(foo3)
-
+hellblock.update = function()
+    physics:update()
+    if hellblock.y < 1 then
+        physics:apply_force(0, 0.05, 0)
+    else physics:apply_force(0, -0.01, 0)
+end end
 --]]
+world.add(hellblock)
