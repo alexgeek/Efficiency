@@ -8,14 +8,10 @@
 // glm
 #include <glm/gtx/string_cast.hpp>
 // me
-#include "Triangle.h"
+
 #include "CameraArcBall.h"
 #include "Input.h"
-#include "Shader.h"
-#include "RenderCube.h"
 #include "BatchedRenderCube.h"
-#include "RenderQuad.h"
-#include "RenderRect.h"
 #include "WindowContext.h"
 #include "Script.h"
 #include "ScriptEngine.h"

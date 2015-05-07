@@ -12,6 +12,8 @@ Game::~Game() {
   free(update_script_);
   free(render_script_);
   free(rect_);
+  for(std::map<int, Dimension*>::iterator it = dimensions_.begin(); it != dimensions_.end(); it++)
+    delete it->second;
   glfwTerminate();
 }
 
@@ -24,6 +26,7 @@ int Game::Init() {
 }
 
 int Game::Start() {
+  load_dimensions();
   /* Loop until the user closes the window */
   GLFWwindow* window = window_context_->window();
   while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE))
@@ -111,4 +114,18 @@ int Game::main_loop() {
   glfwPollEvents();
 
   return 1;
+}
+
+int Game::load_dimensions() {
+  dimensions_[0] = new Dimension();
+  glm::vec2 spawn_region_size = glm::vec2(3,3);
+  for(int x = -spawn_region_size.x/2; x < spawn_region_size.y/2; x++)
+    for(int z = -spawn_region_size.y/2; z < spawn_region_size.y/2; z++)
+      dimensions_[0]->LoadRegion(x, z);
+  return 1;
+}
+
+void Game::update_dimensions() {
+  for(std::map<int, Dimension*>::iterator it = dimensions_.begin(); it != dimensions_.end(); it++)
+    it->second->Update();
 }

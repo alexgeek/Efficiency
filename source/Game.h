@@ -1,14 +1,18 @@
 #ifndef FRUSTRUM_H
 #define FRUSTRUM_H
 
-#include <unordered_map>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <map>
 #include <iostream>
-#include "WindowContext.h"
-#include "ScriptEngine.h"
-#include "Input.h"
-#include "CameraArcBall.h"
+
 #include "Camera.h"
+#include "CameraArcBall.h"
+#include "Dimension.h"
+#include "Input.h"
 #include "RenderRect.h"
+#include "ScriptEngine.h"
+#include "WindowContext.h"
 #include "util.h"
 
 class Game
@@ -29,6 +33,8 @@ class Game
       Input* input_;
       Camera* camera_;
 
+      map<int, Dimension*> dimensions_;
+
       Script* action_script_;
       Script* update_script_;
       Script* render_script_;
@@ -38,6 +44,9 @@ class Game
       int init_input();
       int init_scripting();
       int init_rendering();
+
+      int load_dimensions();
+      void update_dimensions();
 
       int main_loop();
 

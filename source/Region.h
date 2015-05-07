@@ -18,17 +18,40 @@ class Region
       const static int kSizeX = 2^kBitX; // 2^4 = 16
       const static int kSizeY = 2^kBitY; // 2^8 = 256
       const static int kSizeZ = 2^kBitZ; // 2^4 = 16
+
+      void Update();
+
       /**
-       * Get the block that contains in dimension coordinates x,y,z.
+       * Get the block that contains in local region coordinates x,y,z.
        *
-       * @param x coordinate (world)
-       * @param x coordinate (world)
-       * @param x coordinate (world)
-       * @return 0 for air, -1 for logic block, 1+ standard blocks
+       * @param x coordinate (local region)
+       * @param y coordinate (local region)
+       * @param z coordinate (local region)
+       * @return block id
        */
       int GetBlock(unsigned char x, unsigned char y, unsigned char z);
-      bool SetBlock(unsigned char x, unsigned char y, unsigned char z, int block);
-      bool ClearBlock(unsigned char x, unsigned char y, unsigned char z);
+
+      /**
+       * Set the block that contains in local region coordinates x,y,z.
+       *
+       * @param x coordinate (local region)
+       * @param y coordinate (local region)
+       * @param z coordinate (local region)
+       * @param block id to set
+       * @return 1 if successful
+       */
+      int SetBlock(unsigned char x, unsigned char y, unsigned char z, int block);
+
+      /**
+       * Set the block in local region coordinates x,y,z to air.
+       * It is better to delete the current block from the map than insert 0.
+       *
+       * @param x coordinate (local region)
+       * @param y coordinate (local region)
+       * @param z coordinate (local region)
+       * @return 1 if successful
+       */
+      int ClearBlock(unsigned char x, unsigned char y, unsigned char z);
     protected:
     private:
       std::unordered_map<unsigned int, int> block_map_;

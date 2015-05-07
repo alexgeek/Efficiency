@@ -1,5 +1,11 @@
 #include "Dimension.h"
 
+void Dimension::Update() {
+  // TODO update active regions
+  for(std::unordered_map<unsigned int, Region*>::iterator it = region_map_.begin(); it != region_map_.end(); it++)
+    it->second->Update();
+}
+
 int Dimension::LoadRegion(int x, int z) {
   // TODO
   // 1. if loaded return
