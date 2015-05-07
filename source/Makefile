@@ -15,7 +15,7 @@ LIBA = libs/libglfw3.a libs/libdrawtext.a libs/libSOIL.a
 LIBS = -lGLEW -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi -llua -ldl
 
 # Source files for project
-SRCS = main.cpp Input.cpp Window.cpp Triangle.cpp Camera.cpp CameraArcBall.cpp Shader.cpp RenderCube.cpp RenderQuad.cpp RenderRect.cpp BatchedRenderCube.cpp Debug.cpp
+SRCS = main.cpp Game.cpp Input.cpp WindowContext.cpp ScriptEngine.cpp Script.cpp Triangle.cpp Camera.cpp CameraArcBall.cpp Shader.cpp RenderCube.cpp RenderQuad.cpp RenderRect.cpp BatchedRenderCube.cpp Debug.cpp Dimension.cpp Region.cpp
 CSRC = util.c
 
 # Get object names from source names
@@ -38,11 +38,10 @@ $(MAIN): $(OBJS)	$(COBJS)
 # compile (CSRC) c sources with c compiler
 .c.o:
 	$(CC) $(INCLUDES) -c $<  -o $@
-	
+
 # compile (SRCS) c++ source with c++ compiler
 .cpp.o:
 	$(CP) $(CFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
 	$(RM) *.o *~ $(MAIN) gl.log
-

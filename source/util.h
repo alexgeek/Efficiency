@@ -1,6 +1,10 @@
+#ifndef UTIL_H
+#define UTIL_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +16,9 @@ int load_texture(const char*);
 int load_texture_cube(const char* right, const char* left, const char* top, const char* bottom, const char* back, const char* front);
 int screenshot();
 
+
 #ifdef __cplusplus
 }
+#endif
+
 #endif

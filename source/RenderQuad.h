@@ -7,6 +7,10 @@
 #include "Shader.h"
 #include "Camera.h"
 
+/**
+ * Renders a textured plane at a given position.
+ * TODO add rotation
+ */
 class RenderQuad
 {
     public:
@@ -24,4 +28,3 @@ class RenderQuad
 };
 
 #endif // RENDERQUAD_H
-

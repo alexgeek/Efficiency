@@ -7,6 +7,10 @@
 #include "Shader.h"
 #include "Camera.h"
 
+/**
+ * Renders a 2D rectangle to the screen.
+ * For GUIs and other overlays.
+ */
 class RenderRect
 {
     public:
@@ -25,4 +29,3 @@ class RenderRect
 };
 
 #endif // RENDERRECT_H
-
