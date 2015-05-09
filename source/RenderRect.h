@@ -14,9 +14,9 @@
 class RenderRect
 {
     public:
-        RenderRect(string texture);
-        RenderRect(string texture, string fragment);
-        void init(string texture);
+        RenderRect(std::string texture);
+        RenderRect(std::string texture, std::string fragment);
+        void init(std::string texture);
         void draw(Camera* camera, glm::vec2 resolution);
     protected:
         Shader shader_;

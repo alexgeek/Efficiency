@@ -9,19 +9,19 @@ static const GLfloat rect_vertex_buffer_data[] = {
 	+1.0f,-1.0f, 0,
 };
 
-RenderRect::RenderRect(string texture, string fragment) : shader_(Shader("rect", fragment))
+RenderRect::RenderRect(std::string texture, std::string fragment) : shader_(Shader("rect", fragment))
 {
     init(texture);
 }
 
-RenderRect::RenderRect(string texture) : RenderRect(texture, "rect")
+RenderRect::RenderRect(std::string texture) : RenderRect(texture, "rect")
 {
 }
 
-void RenderRect::init(string texture)
+void RenderRect::init(std::string texture)
 {
     texture_id_ = load_texture(texture.c_str());
-    cout << "Texure #" << texture_id_ << endl;
+    std::cout << "Texure #" << texture_id_ << std::endl;
     printOpenGLError();
 
   	mvp_ = glm::mat4(1.0f);
@@ -31,7 +31,6 @@ void RenderRect::init(string texture)
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id_);
     glBufferData(GL_ARRAY_BUFFER, sizeof(rect_vertex_buffer_data), rect_vertex_buffer_data, GL_STATIC_DRAW);
 
-      	cout << "[@]" << endl;
     printOpenGLError();
 }
 

@@ -1,5 +1,7 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
+
+#include <stdlib.h>
 #include <glm/glm.hpp>
 
 class Triangle

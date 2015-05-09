@@ -9,19 +9,18 @@ static const GLfloat quad_vertex_buffer_data[] = {
 	+0.5f,-0.5f, 0,
 };
 
-RenderQuad::RenderQuad(string texture, string fragment) : shader_(Shader("quad", fragment))
+RenderQuad::RenderQuad(std::string texture, std::string fragment) : shader_(Shader("quad", fragment))
 {
     init(texture);
 }
 
-RenderQuad::RenderQuad(string texture) : RenderQuad(texture, "quad")
+RenderQuad::RenderQuad(std::string texture) : RenderQuad(texture, "quad")
 {
 }
 
-void RenderQuad::init(string texture)
+void RenderQuad::init(std::string texture)
 {   
     texture_id_ = load_texture(texture.c_str());
-    cout << "Texure #" << texture_id_ << endl;
     printOpenGLError();
     
   	mvp_ = glm::mat4(1.0f);
@@ -30,7 +29,7 @@ void RenderQuad::init(string texture)
     glGenBuffers(1, &vertex_buffer_id_);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id_);
     glBufferData(GL_ARRAY_BUFFER, sizeof(quad_vertex_buffer_data), quad_vertex_buffer_data, GL_STATIC_DRAW);
-    cout << "[renderquad]" << endl;
+
     printOpenGLError();
 }
 

@@ -39,20 +39,20 @@ static const GLfloat cube_vertex_buffer_data[] = {
 	 0.5f,-0.5f, 0.5f
 };
 
-RenderCube::RenderCube(string right, string left, string top, string bottom, string back, string front) : shader_(Shader("cube"))
+RenderCube::RenderCube(std::string right, std::string left, std::string top, std::string bottom, std::string back, std::string front) : shader_(Shader("cube"))
 {
     init(right, left, top, bottom, back, front);
 }
 
-RenderCube::RenderCube(string top, string sides) : RenderCube(sides, sides, top, sides, sides, sides)
+RenderCube::RenderCube(std::string top, std::string sides) : RenderCube(sides, sides, top, sides, sides, sides)
 {
 }
 
-RenderCube::RenderCube(string texture) : RenderCube(texture, texture, texture, texture, texture, texture)
+RenderCube::RenderCube(std::string texture) : RenderCube(texture, texture, texture, texture, texture, texture)
 {
 }
 
-void RenderCube::init(string right, string left, string top, string bottom, string back, string front)
+void RenderCube::init(std::string right, std::string left, std::string top, std::string bottom, std::string back, std::string front)
 {   
     texture_id_ = load_texture_cube(
         right.c_str(), 
@@ -62,7 +62,7 @@ void RenderCube::init(string right, string left, string top, string bottom, stri
         back.c_str(), 
         front.c_str()
     );
-    cout << "Texure #" << texture_id_ << endl;
+	std::cout << "Texure #" << texture_id_ << std::endl;
     printOpenGLError();
     
   	mvp_ = glm::mat4(1.0f);

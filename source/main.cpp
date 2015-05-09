@@ -17,7 +17,6 @@
 #include "ScriptEngine.h"
 #include "Game.h"
 // c files
-#include "util.h"
 
 Game* game;
 

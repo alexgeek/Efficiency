@@ -39,20 +39,20 @@ static const GLfloat vertex_buffer_data[] = {
 	 0.5f,-0.5f, 0.5f
 };
 
-BatchedRenderCube::BatchedRenderCube(string right, string left, string top, string bottom, string back, string front) : shader_(Shader("batchcube"))
+BatchedRenderCube::BatchedRenderCube(std::string right, std::string left, std::string top, std::string bottom, std::string back, std::string front) : shader_(Shader("batchcube"))
 {
     init(right, left, top, bottom, back, front);
 }
 
-BatchedRenderCube::BatchedRenderCube(string top, string sides) : BatchedRenderCube(sides, sides, top, sides, sides, sides)
+BatchedRenderCube::BatchedRenderCube(std::string top, std::string sides) : BatchedRenderCube(sides, sides, top, sides, sides, sides)
 {
 }
 
-BatchedRenderCube::BatchedRenderCube(string texture) : BatchedRenderCube(texture, texture, texture, texture, texture, texture)
+BatchedRenderCube::BatchedRenderCube(std::string texture) : BatchedRenderCube(texture, texture, texture, texture, texture, texture)
 {
 }
 
-void BatchedRenderCube::init(string right, string left, string top, string bottom, string back, string front)
+void BatchedRenderCube::init(std::string right, std::string left, std::string top, std::string bottom, std::string back, std::string front)
 {
     texture_id_ = load_texture_cube(
         right.c_str(),
@@ -77,7 +77,7 @@ void BatchedRenderCube::init(string right, string left, string top, string botto
     glGenBuffers(1, &position_buffer_id_);
     glBindBuffer(GL_ARRAY_BUFFER, position_buffer_id_);
     glBufferData(GL_ARRAY_BUFFER, MAX_BLOCKS * sizeof(glm::vec3), NULL, GL_STREAM_DRAW);
-    cout << "Finish batch init" << endl;
+
     printOpenGLError();
 }
 

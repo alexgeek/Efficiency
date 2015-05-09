@@ -14,9 +14,9 @@
 class RenderQuad
 {
     public:
-        RenderQuad(string texture);
-        RenderQuad(string texture, string fragment);
-        void init(string texture);
+        RenderQuad(std::string texture);
+        RenderQuad(std::string texture, std::string fragment);
+        void init(std::string texture);
         void draw(Camera* camera, glm::vec3 position);
     protected:
         Shader shader_;

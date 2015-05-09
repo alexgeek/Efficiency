@@ -13,15 +13,15 @@
 class BatchedRenderCube
 {
     public:
-        BatchedRenderCube(string right, string left, string top, string bottom, string back, string front);
-        BatchedRenderCube(string top, string sides);
-        BatchedRenderCube(string texture);
-        void init(string right, string left, string top, string bottom, string back, string front);
+        BatchedRenderCube(std::string right, std::string left, std::string top, std::string bottom, std::string back, std::string front);
+        BatchedRenderCube(std::string top, std::string sides);
+        BatchedRenderCube(std::string texture);
+        void init(std::string right, std::string left, std::string top, std::string bottom, std::string back, std::string front);
         // in order of use:
         void buffer_position(glm::vec3);
         void render(Camera* camera);
     protected:
-        vector<glm::vec3> positions_;
+        std::vector<glm::vec3> positions_;
         Shader shader_;
         GLuint vertex_array_id_;
         GLuint vertex_buffer_id_;

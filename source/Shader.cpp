@@ -1,13 +1,13 @@
 #include "Shader.h"
 
-Shader::Shader(string vertex, string fragment)
+Shader::Shader(std::string vertex, std::string fragment)
 {
     vertex_shader_file_ = vertex; vertex_shader_file_ = "assets/shaders/" + vertex_shader_file_ + ".vs"; // TODO if not already
     fragment_shader_file_ = fragment; fragment_shader_file_ = "assets/shaders/" + fragment_shader_file_ + ".fs"; // TODO ditto
     program_id_ = load_program(vertex_shader_file_.c_str(), fragment_shader_file_.c_str());
 }
 
-Shader::Shader(string name) : Shader(name, name)
+Shader::Shader(std::string name) : Shader(name, name)
 {
 }
 
@@ -16,8 +16,9 @@ int Shader::id()
     return program_id_;
 }
 
-int Shader::load_file(string path, string& content)
+int Shader::load_file(std::string path, std::string& content)
 {
+	using namespace std;
 	ifstream ifs(path, ios::in);
 	if(!ifs.is_open())
 	{
@@ -36,7 +37,7 @@ int Shader::load_file(string path, string& content)
 // TODO handle failure gracefully when shader not found, e.g. default shader
 int Shader::load_shader(GLuint shaderId, const char* path)
 {
-	string shaderContent;
+	std::string shaderContent;
 
 	load_file(path, shaderContent);
 	char const* shaderContentPointer = shaderContent.c_str();
@@ -49,12 +50,12 @@ int Shader::load_shader(GLuint shaderId, const char* path)
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &result);
 	glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logLength);
 
-	if(logLength > 0)
+	if(logLength > 1)
 	{
 		char log[logLength+1];
 		log[logLength] = '\0';
 		glGetShaderInfoLog(shaderId, logLength, NULL, log);
-		std::cout << "shader log: " <<  log << std::endl;
+		std::cout << "Shader log: " <<  log << std::endl;
 	}
 
 	return 0;
@@ -81,12 +82,12 @@ int Shader::load_program(const char* vertexShaderFile, const char* fragmentShade
 	glGetProgramiv(programId, GL_LINK_STATUS, &result);
 	glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &logLength);
 
-	if(logLength > 0)
+	if(logLength > 1)
 	{
 		char log[logLength+1];
 		log[logLength] = '\0';
 		glGetProgramInfoLog(programId, logLength, NULL, log);
-		cout << "link program log: " << log << endl;
+		std::cout << "Program log: " << log << std::endl;
 	}
 
 	glDeleteShader(vertexShaderId);
