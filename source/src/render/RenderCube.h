@@ -1,11 +1,11 @@
-#ifndef RENDERCUBE_H
-#define RENDERCUBE_H
+#ifndef RENDER_CUBE_H
+#define RENDER_CUBE_H
 
-#include "default.h"
-#include "util.h"
-#include "Debug.h"
+#include "../default.h"
+#include "../util.h"
+#include "../Debug.h"
 #include "Shader.h"
-#include "Camera.h"
+#include "../camera/Camera.h"
 
 class RenderCube
 {
@@ -24,5 +24,5 @@ class RenderCube
     private:
 };
 
-#endif // RENDERCUBE_H
+#endif
 

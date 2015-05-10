@@ -4,17 +4,12 @@
 // c++
 #include <vector>
 #include <stack>
-#include <string>
 // glm
 #include <glm/gtx/string_cast.hpp>
 // me
 
-#include "CameraArcBall.h"
-#include "Input.h"
-#include "BatchedRenderCube.h"
-#include "WindowContext.h"
-#include "Script.h"
-#include "ScriptEngine.h"
+#include "camera/CameraArcBall.h"
+#include "render/BatchedRenderCube.h"
 #include "Game.h"
 // c files
 

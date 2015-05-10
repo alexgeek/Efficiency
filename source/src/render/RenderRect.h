@@ -1,11 +1,11 @@
-#ifndef RENDERRECT_H
-#define RENDERRECT_H
+#ifndef RENDER_RECT_H
+#define RENDER_RECT_H
 
-#include "default.h"
-#include "util.h"
-#include "Debug.h"
+#include "../default.h"
+#include "../util.h"
+#include "../Debug.h"
 #include "Shader.h"
-#include "Camera.h"
+#include "../camera/Camera.h"
 
 /**
  * Renders a 2D rectangle to the screen.
@@ -28,4 +28,4 @@ class RenderRect
     private:
 };
 
-#endif // RENDERRECT_H
+#endif

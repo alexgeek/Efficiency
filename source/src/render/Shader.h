@@ -1,8 +1,8 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "default.h"
-#include "util.h"
+#include "../default.h"
+#include "../util.h"
 #include <fstream>
 
 class Shader

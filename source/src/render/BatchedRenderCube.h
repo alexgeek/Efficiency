@@ -1,12 +1,12 @@
 #ifndef BATCHEDRENDERCUBE_H
 #define BATCHEDRENDERCUBE_H
 
-#include "default.h"
-#include "util.h"
+#include "../default.h"
+#include "../util.h"
 #include <vector>
-#include "Debug.h"
+#include "../Debug.h"
 #include "Shader.h"
-#include "Camera.h"
+#include "../camera/Camera.h"
 
 #define MAX_BLOCKS 20000
 

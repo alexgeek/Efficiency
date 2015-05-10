@@ -45,25 +45,25 @@ add_definitions(
 )
 
 set(GAME_SRC
-    main.cpp
-    BatchedRenderCube.cpp
-    Camera.cpp
-    CameraArcBall.cpp
-    Debug.cpp
-    Dimension.cpp
-    Game.cpp
-    Input.cpp
-    Region.cpp
-    Region.cpp
-    RenderCube.cpp
-    RenderQuad.cpp
-    RenderRect.cpp
-    Script.cpp
-    ScriptEngine.cpp
-    Shader.cpp
-    Triangle.cpp
-    util.c
-    WindowContext.cpp
+    src/main.cpp
+    src/render/BatchedRenderCube.cpp
+    src/camera/Camera.cpp
+    src/camera/CameraArcBall.cpp
+    src/Debug.cpp
+    src/world/Dimension.cpp
+    src/Game.cpp
+    src/Input.cpp
+    src/world/Region.cpp
+    src/world/Region.cpp
+    src/render/RenderCube.cpp
+    src/render/RenderQuad.cpp
+    src/render/RenderRect.cpp
+    src/script/Script.cpp
+    src/script/ScriptEngine.cpp
+    src/render/Shader.cpp
+    src/render/Triangle.cpp
+    src/util.c
+    src/WindowContext.cpp
 )
 add_executable(${PROJECT_NAME} ${GAME_SRC})
 

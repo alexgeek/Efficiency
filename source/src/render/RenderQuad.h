@@ -1,11 +1,11 @@
-#ifndef RENDERQUAD_H
-#define RENDERQUAD_H
+#ifndef RENDER_QUAD_H
+#define RENDER_QUAD_H
 
-#include "default.h"
-#include "util.h"
-#include "Debug.h"
+#include "../default.h"
+#include "../util.h"
+#include "../Debug.h"
 #include "Shader.h"
-#include "Camera.h"
+#include "../camera/Camera.h"
 
 /**
  * Renders a textured plane at a given position.

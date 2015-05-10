@@ -6,12 +6,12 @@
 #include <map>
 #include <iostream>
 
-#include "Camera.h"
-#include "CameraArcBall.h"
-#include "Dimension.h"
+#include "camera/Camera.h"
+#include "camera/CameraArcBall.h"
+#include "world/Dimension.h"
 #include "Input.h"
-#include "RenderRect.h"
-#include "ScriptEngine.h"
+#include "render/RenderRect.h"
+#include "script/ScriptEngine.h"
 #include "WindowContext.h"
 #include "util.h"
 
