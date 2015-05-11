@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(game)
 
-#add_definitions(-std=c++11)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+
+# https://github.com/g-truc/glm/issues/300
+add_definitions(-D__NO_INLINE__)
 
 set(GLFW_SOURCE_DIR "external/glfw")
 set(GLM_SOURCE_DIR "external/glm")
