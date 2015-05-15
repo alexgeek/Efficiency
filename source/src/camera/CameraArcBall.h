@@ -10,7 +10,6 @@ class CameraArcBall : public Camera
 {
     public:
         CameraArcBall(glm::vec3 position, glm::vec3 target);
-        std::string get_name();
         glm::mat4 get_projection();
         glm::mat4 get_view();
         void update(GLFWwindow*);

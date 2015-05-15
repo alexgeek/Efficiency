@@ -10,7 +10,7 @@ class Shader
     public:
         Shader(std::string vertex, std::string fragment);
         Shader(std::string name);
-        int id();
+        GLuint id();
     protected:
         GLuint program_id_;
         std::string vertex_shader_file_;
@@ -18,7 +18,7 @@ class Shader
         
         int load_file(std::string path, std::string& content);
         int load_shader(GLuint shaderId, const char* path);
-        int load_program(const char* vertexShaderFile, const char* fragmentShaderFile);
+        GLuint load_program(const char* vertexShaderFile, const char* fragmentShaderFile);
     private:
 };
 

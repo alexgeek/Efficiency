@@ -10,11 +10,6 @@ CameraArcBall::CameraArcBall(glm::vec3 position, glm::vec3 target) :
 {
 }
 
-std::string get_name()
-{
-    return "CameraArcBall";
-}
-
 glm::mat4 CameraArcBall::get_projection()
 {
     return default_projection();

@@ -11,7 +11,7 @@ Shader::Shader(std::string name) : Shader(name, name)
 {
 }
 
-int Shader::id()
+GLuint Shader::id()
 {
     return program_id_;
 }
@@ -61,7 +61,7 @@ int Shader::load_shader(GLuint shaderId, const char* path)
 	return 0;
 }
 
-int Shader::load_program(const char* vertexShaderFile, const char* fragmentShaderFile)
+GLuint Shader::load_program(const char* vertexShaderFile, const char* fragmentShaderFile)
 {
 	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);

@@ -67,7 +67,7 @@ int load_texture(const char* file)									// Load Bitmaps And Convert To Textur
 }
 
 // http://antongerdelan.net/opengl/cubemaps.html
-int load_texture_cube(const char* right, const char* left, const char* top, const char* bottom, const char* back, const char* front)
+GLuint load_texture_cube(const char* right, const char* left, const char* top, const char* bottom, const char* back, const char* front)
 {
     GLuint texture = SOIL_load_OGL_cubemap (
       right,

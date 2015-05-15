@@ -2,7 +2,7 @@
 
 Game::Game() :
   script_engine_(ScriptEngine()),
-  input_(&Input::instance())
+  input_(&Input::Instance())
 {
 }
 
@@ -87,7 +87,7 @@ int Game::main_loop() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT /*| GL_STENCIL_BUFFER_BIT*/);
 
   // update input and actions
-  Input::instance().update(window);
+  Input::Instance().update(window);
 
   // update view and projection
   camera_->update(window);

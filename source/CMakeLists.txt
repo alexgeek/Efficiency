@@ -49,6 +49,8 @@ add_definitions(
 
 set(GAME_SRC
     src/main.cpp
+    src/block/Block.cpp
+    src/block/BlockRegistry.cpp
     src/render/BatchedRenderCube.cpp
     src/camera/Camera.cpp
     src/camera/CameraArcBall.cpp
@@ -68,7 +70,7 @@ set(GAME_SRC
     src/util.c
     src/WindowContext.cpp
 )
-add_executable(${PROJECT_NAME} ${GAME_SRC})
+add_executable(${PROJECT_NAME} ${GAME_SRC} src/block/BlockRegistry.h src/block/Block.h src/block/BlockRegistry.cpp src/block/Block.cpp src/render/RenderWorld.h src/render/RenderWorld.cpp)
 
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES} glew ${OPENCL_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/libs/libglfw.a)

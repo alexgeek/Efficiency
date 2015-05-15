@@ -33,7 +33,7 @@
 int luaS_eqlngstr (TString *a, TString *b) {
   size_t len = a->tsv.len;
   lua_assert(a->tsv.tt == LUA_TLNGSTR && b->tsv.tt == LUA_TLNGSTR);
-  return (a == b) ||  /* same instance or... */
+  return (a == b) ||  /* same Instance or... */
     ((len == b->tsv.len) &&  /* equal length and ... */
      (memcmp(getstr(a), getstr(b), len) == 0));  /* equal contents */
 }

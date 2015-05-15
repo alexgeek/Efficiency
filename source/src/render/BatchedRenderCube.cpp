@@ -132,7 +132,7 @@ void BatchedRenderCube::render(Camera* camera)
 	);
 
     glVertexAttribDivisor(0, 0); // particles vertices : always reuse the same 4 vertices -> 0
-		glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
+	glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
 
     glDrawArraysInstanced(GL_TRIANGLES, 0, 12*3, positions_.size());
     glDisableVertexAttribArray(0);

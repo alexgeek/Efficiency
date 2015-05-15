@@ -164,7 +164,7 @@ void luaC_barrierback_ (lua_State *L, GCObject *o) {
 /*
 ** barrier for prototypes. When creating first closure (cache is
 ** NULL), use a forward barrier; this may be the only closure of the
-** prototype (if it is a "regular" function, with a single instance)
+** prototype (if it is a "regular" function, with a single Instance)
 ** and the prototype may be big, so it is better to avoid traversing
 ** it again. Otherwise, use a backward barrier, to avoid marking all
 ** possible instances.

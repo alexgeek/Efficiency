@@ -27,7 +27,7 @@ class BatchedRenderCube
         GLuint vertex_buffer_id_;
         GLuint position_buffer_id_;
         GLuint texture_id_;
-        GLuint mv_id_;
+        GLint mv_id_;
         glm::mat4 mv_;
     private:
         void prepare(Camera* camera);

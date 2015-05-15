@@ -11,7 +11,7 @@ using namespace std;
 class Input
 {
     public:   
-        static Input& instance()
+        static Input& Instance()
         {
             static Input instance;
             return instance;
