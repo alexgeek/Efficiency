@@ -20,7 +20,7 @@ glm::mat4 CameraArcBall::get_view()
     return glm::lookAt(position_, target_, up_);
 }
 
-// http://gamedev.stackexchange.com/questions/53333/how-to-implement-a-basic-arcball-camera-in-opengl-with-glm
+// http://gamedev.stackexchange.com/questions/53333/how-to-implement-a-basic-arcball-GetActiveCamera-in-opengl-with-glm
 void CameraArcBall::update(GLFWwindow* window)
 {
     float now = glfwGetTime();

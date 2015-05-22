@@ -1,5 +1,5 @@
-#ifndef FRUSTRUM_H
-#define FRUSTRUM_H
+#ifndef GAME_H
+#define GAME_H
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -14,6 +14,7 @@
 #include "script/ScriptEngine.h"
 #include "WindowContext.h"
 #include "util.h"
+#include "render/RenderWorld.h"
 
 class Game
 {
@@ -24,22 +25,30 @@ class Game
       int Start();
 
       /* accessors & mutators */
-      Camera* camera() const { return camera_; }
-      void set_camera(Camera* camera) { camera_ = camera; }
+      RenderWorld* GetRenderWorld() { return &render_world_; };
+      Camera* GetActiveCamera() const { return camera_; }
+      void SetActiveCamera(Camera *camera) { camera_ = camera; }
     protected:
     private:
+      // core func
       WindowContext* window_context_;
       ScriptEngine script_engine_;
       Input* input_;
       Camera* camera_;
 
+      // containers
       map<int, Dimension*> dimensions_;
 
+      // scripts
       Script* action_script_;
       Script* update_script_;
       Script* render_script_;
-      RenderRect* rect_;
 
+      // render
+      RenderRect* rect_;
+      RenderWorld render_world_;
+
+      // sub-taks of initialisation
       int init_context();
       int init_input();
       int init_scripting();

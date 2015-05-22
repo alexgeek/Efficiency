@@ -1,6 +1,7 @@
 #ifndef DIMENSION_H
 #define DIMENSION_H
 
+#include <vector>
 #include <unordered_map>
 #include <iostream>
 #include <GLFW/glfw3.h>
@@ -16,6 +17,10 @@ class Dimension
         int LoadRegion(int x, int z);
         int UnloadRegion(int x, int z);
         Region* GetRegion(int x, int z);
+        std::vector<Region*> GetRegionsAround(int x, int z, int distance);
+        std::vector<Region *> GetRegionsAroundPrealloc(int x, int z, int distance);
+        int CountLoadedRegions();
+        int IsRegionLoaded(int x, int z);
         int GetBlock(int x, int y, int z);
         bool SetBlock(int x, int y, int z, int block);
         bool ClearBlock(int x, int y, int z);
@@ -28,6 +33,8 @@ class Dimension
       std::string name_;
       std::unordered_map<unsigned int, Region*> region_map_;
       unsigned int hash_region_key(int x, int z);
+      int LoadRegion(unsigned int key);
+
 };
 
 

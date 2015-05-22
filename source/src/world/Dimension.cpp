@@ -12,11 +12,12 @@ int Dimension::LoadRegion(int x, int z) {
   // 2. if not loaded then
   //  a. if not generated, generate
   //  b. if generated but not loaded, load
-  Region* region = new Region();
-  //region->SetBlock(0,0,0,1);
-  region_map_[hash_region_key(x, z)] = region;
-
-  return 0;
+  if(IsRegionLoaded(x, z))
+    return 1;
+  Region* region = new Region(x, z);
+  const unsigned int region_key = hash_region_key(x, z);
+  region_map_[region_key] = region;
+  return 1;
 }
 
 int Dimension::UnloadRegion(int x, int z) {
@@ -28,9 +29,36 @@ int Dimension::UnloadRegion(int x, int z) {
 }
 
 Region* Dimension::GetRegion(int x, int z) {
-  // TODO if the map contains NULL at x,z
-  // then load the region
-  return region_map_[hash_region_key(x, z)];
+  const unsigned int region_key = hash_region_key(x, z);
+  if(region_map_.count(hash_region_key(x, z)) == 0)
+    LoadRegion(x, z);
+  return region_map_[region_key];
+}
+
+std::vector<Region*> Dimension::GetRegionsAroundPrealloc(int x, int z, int distance) {
+  std::vector<Region*> regions;
+  const int sqrt_size = 2*distance+1;
+  regions.reserve(sqrt_size*sqrt_size);
+  for(int rx = -distance; rx <= distance; rx++)
+    for(int rz = -distance; rz <= distance; rz++)
+      regions.push_back(GetRegion(rx + x, rz + z));
+  return regions;
+}
+
+std::vector<Region*> Dimension::GetRegionsAround(int x, int z, int distance) {
+  std::vector<Region*> regions;
+  for(int rx = -distance; rx <= distance; rx++)
+    for(int rz = -distance; rz <= distance; rz++)
+      regions.push_back(GetRegion(rx + x, rz + z));
+  return regions;
+}
+
+int Dimension::CountLoadedRegions() {
+  return region_map_.size();
+}
+
+int Dimension::IsRegionLoaded(int x, int z) {
+  return region_map_.count(hash_region_key(x, z)) == 1;
 }
 
 bool Dimension::SetBlock(int x, int y, int z, int block) {

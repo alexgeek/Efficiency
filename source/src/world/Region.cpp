@@ -1,5 +1,10 @@
 #include "Region.h"
 
+Region::Region(int x, int z) :
+  x_(x),
+  z_(z)
+{ }
+
 void Region::Update() {
 
 }

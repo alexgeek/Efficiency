@@ -1,12 +1,18 @@
 #ifndef BATCHEDRENDERCUBE_H
 #define BATCHEDRENDERCUBE_H
 
-#include "../default.h"
-#include "../util.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>         // core window handling
+#include <glm/gtc/matrix_transform.hpp> // rotate etc
+#include <glm/gtc/type_ptr.hpp> // replace with macro for glm to and from opengl
+#include <iostream>
+#include <string>
 #include <vector>
+
+#include "../util.h"
 #include "../Debug.h"
-#include "Shader.h"
 #include "../camera/Camera.h"
+#include "Shader.h"
 
 #define MAX_BLOCKS 20000
 

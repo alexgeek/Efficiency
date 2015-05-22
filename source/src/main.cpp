@@ -13,33 +13,13 @@
 #include "Game.h"
 // c files
 
+/**
+ * Global reference to the game for lua scripting.
+ */
 Game* game;
 
 // temp globals
 vector<BatchedRenderCube*> renderer;
-
-int lua_set_camera(lua_State *l)
-{
-    int argc = lua_gettop(l);
-    glm::vec3 position, target;
-
-    target = glm::vec3(0);
-    for(int i = 0; i < 3; i++)
-    {
-        target[2-i] = lua_tonumber(l, lua_gettop(l));
-        lua_pop(l, 1);
-    }
-    position = glm::vec3(0);
-    for(int i = 0; i < 3; i++)
-    {
-        position[2-i] = lua_tonumber(l, lua_gettop(l));
-        lua_pop(l, 1);
-    }
-    Camera* camera = new CameraArcBall(position, target);
-    game->set_camera(camera);
-    std::cout << "Camera: " << argc << std::endl << glm::to_string(position) << ", " << glm::to_string(target) << std::endl;
-    return 0;
-}
 
 int lua_load_renderer(lua_State *l)
 {
@@ -50,6 +30,7 @@ int lua_load_renderer(lua_State *l)
         textures.push(lua_tostring(l, lua_gettop(l)));
         lua_pop(l, 1);
     }
+    unsigned int blockID = lua_tonumber(l, lua_gettop(l));
     switch(argc)
     {
         case 1:
@@ -98,7 +79,7 @@ int lua_drawbatch(lua_State* l)
 {
     int argc = lua_gettop(l);
     for(std::vector<BatchedRenderCube*>::iterator it = renderer.begin(); it != renderer.end(); ++it) {
-        (*it)->render(game->camera());
+        (*it)->render(game->GetActiveCamera());
     }
     return 0;
 }

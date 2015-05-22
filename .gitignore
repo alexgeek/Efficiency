@@ -1,3 +1,4 @@
 *.o
 source/build
 source/.idea
+*Thumbs.db

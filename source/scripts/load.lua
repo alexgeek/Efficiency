@@ -1,6 +1,6 @@
 -- camera setup
-camera(5, 5, 5,
-       4.9, 4.9, 4.9);
+--camera(5, 5, 5,
+--       4.9, 4.9, 4.9);
 
 -- initial scene set up
 local player = entity("player")

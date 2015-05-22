@@ -49,7 +49,7 @@ int Game::init_context() {
 int Game::init_scripting() {
   int ret = script_engine_.Init();
   if (ret) {
-    script_engine_.RegisterFunction(lua_set_camera, "camera");
+    //script_engine_.RegisterFunction(lua_set_camera, "GetActiveCamera");
     script_engine_.RegisterFunction(lua_drawcube, "drawblock");
     script_engine_.RegisterFunction(lua_load_renderer, "load_renderer");
     script_engine_.RegisterFunction(lua_drawbatch, "drawbatch");
@@ -71,7 +71,7 @@ int Game::init_scripting() {
 }
 
 int Game::init_rendering() {
-  // camera
+  // GetActiveCamera
   // renderers
   camera_ = new CameraArcBall(glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(4.9f, 4.9f, 4.9f));
   rect_ = new RenderRect("assets/textures/tex16.png", "inversion2");
@@ -97,6 +97,8 @@ int Game::main_loop() {
 
   script_engine_.Run(update_script_);
   script_engine_.Run(render_script_);
+
+  render_world_.Render(GetActiveCamera());
 
   if(glfwGetKey(window, 'F'))
       std::cout << "FPS: " << calcFPS(glfwGetTime()) << std::endl;
