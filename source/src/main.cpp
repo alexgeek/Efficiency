@@ -10,6 +10,8 @@
 
 #include "camera/CameraArcBall.h"
 #include "render/BatchedRenderCube.h"
+#include "util/luawrapper.hpp"
+#include "util/luawrapperutil.hpp"
 #include "Game.h"
 // c files
 
@@ -30,7 +32,7 @@ int lua_load_renderer(lua_State *l)
         textures.push(lua_tostring(l, lua_gettop(l)));
         lua_pop(l, 1);
     }
-    unsigned int blockID = lua_tonumber(l, lua_gettop(l));
+    unsigned int blockID = (unsigned int)lua_tonumber(l, lua_gettop(l));
     switch(argc)
     {
         case 1:
@@ -70,7 +72,7 @@ int lua_drawcube(lua_State *l)
     int renderer_id = lua_tointeger(l, lua_gettop(l));
     lua_pop(l, 1);
 
-    renderer[renderer_id]->buffer_position(position);
+    renderer[renderer_id]->BufferPosition(position);
 
     return 0;
 }
@@ -79,7 +81,7 @@ int lua_drawbatch(lua_State* l)
 {
     int argc = lua_gettop(l);
     for(std::vector<BatchedRenderCube*>::iterator it = renderer.begin(); it != renderer.end(); ++it) {
-        (*it)->render(game->GetActiveCamera());
+        (*it)->Render(game->ActiveCamera());
     }
     return 0;
 }
@@ -90,6 +92,21 @@ int lua_time(lua_State* l)
     lua_pushnumber(l, glfwGetTime());
     return 1;
 }
+
+int lua_get_block(lua_State* l)
+{
+    int blockID = luaL_checkint(l, 1);
+    lua_pushlightuserdata(l, BlockRegistry::Instance().GetBlock(blockID));
+    return 1;
+}
+
+int lua_get_block_by_name(lua_State* l)
+{
+    std::string blockName = luaU_check<std::string>(l, 1);
+    lua_pushlightuserdata(l, BlockRegistry::Instance().GetBlock(blockName));
+    return 1;
+}
+
 
 int main(void)
 {

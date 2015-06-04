@@ -183,7 +183,7 @@ static void init_registry (lua_State *L, global_State *g) {
 static void f_luaopen (lua_State *L, void *ud) {
   global_State *g = G(L);
   UNUSED(ud);
-  stack_init(L, L);  /* init stack */
+  stack_init(L, L);  /* Init stack */
   init_registry(L, g);
   luaS_resize(L, MINSTRTABSIZE);  /* initial size of string table */
   luaT_init(L);
@@ -247,7 +247,7 @@ LUA_API lua_State *lua_newthread (lua_State *L) {
   L1->hook = L->hook;
   resethookcount(L1);
   luai_userstatethread(L, L1);
-  stack_init(L1, L);  /* init stack */
+  stack_init(L1, L);  /* Init stack */
   lua_unlock(L);
   return L1;
 }

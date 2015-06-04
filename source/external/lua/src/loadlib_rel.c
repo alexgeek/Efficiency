@@ -387,7 +387,7 @@ static int ll_loadlib (lua_State *L) {
   else {  /* error; error message is on stack top */
     lua_pushnil(L);
     lua_insert(L, -2);
-    lua_pushstring(L, (stat == ERRLIB) ?  LIB_FAIL : "init");
+    lua_pushstring(L, (stat == ERRLIB) ?  LIB_FAIL : "Init");
     return 3;  /* return nil, error message, and where */
   }
 }

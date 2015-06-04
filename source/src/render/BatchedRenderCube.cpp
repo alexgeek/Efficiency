@@ -41,7 +41,7 @@ static const GLfloat vertex_buffer_data[] = {
 
 BatchedRenderCube::BatchedRenderCube(std::string right, std::string left, std::string top, std::string bottom, std::string back, std::string front) : shader_(Shader("batchcube"))
 {
-    init(right, left, top, bottom, back, front);
+	Init(right, left, top, bottom, back, front);
 }
 
 BatchedRenderCube::BatchedRenderCube(std::string top, std::string sides) : BatchedRenderCube(sides, sides, top, sides, sides, sides)
@@ -52,7 +52,8 @@ BatchedRenderCube::BatchedRenderCube(std::string texture) : BatchedRenderCube(te
 {
 }
 
-void BatchedRenderCube::init(std::string right, std::string left, std::string top, std::string bottom, std::string back, std::string front)
+void BatchedRenderCube::Init(std::string right, std::string left, std::string top, std::string bottom, std::string back,
+							 std::string front)
 {
     texture_id_ = load_texture_cube(
         right.c_str(),
@@ -100,12 +101,21 @@ void BatchedRenderCube::prepare(Camera* camera)
 }
 
 
-void BatchedRenderCube::buffer_position(glm::vec3 position)
+void BatchedRenderCube::BufferPosition(glm::vec3 position)
 {
     positions_.push_back(position);
 }
 
-void BatchedRenderCube::render(Camera* camera)
+void BatchedRenderCube::BufferPosition(float x, float y, float z)
+{
+	BufferPosition(glm::vec3(x,y,z));
+}
+
+unsigned int BatchedRenderCube::BufferSize() {
+	return positions_.size();
+}
+
+void BatchedRenderCube::Render(Camera *camera)
 {
     prepare(camera);
 

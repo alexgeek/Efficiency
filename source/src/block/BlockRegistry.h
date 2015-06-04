@@ -2,6 +2,7 @@
 #define GAME_BLOCKREGISTRY_H
 
 #include <map>
+#include <unordered_map>
 #include "Block.h"
 
 class Block;
@@ -18,12 +19,8 @@ public:
 
     unsigned int RegisterBlock(Block* block);
     Block* GetBlock(unsigned int);
-    /**
-     * Registers all renderers for each block.
-     * Can only be called once and must be after all blocks have been registered.
-     */
-    //unsigned int RegisterBlockRenderer(Block*);
-    unsigned int RegisterBlockRenderers();
+    Block* GetBlock(std::string);
+    unsigned int Size();
 
 private:
     // singleton
@@ -34,6 +31,7 @@ private:
 
     bool registered_renderers_ = false;
     std::map<unsigned int, Block*> blocks_;
+    std::unordered_map<std::string, Block*> block_names_;
 
 };
 

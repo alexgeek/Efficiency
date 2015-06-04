@@ -43,7 +43,7 @@ extern "C" {
  *  This is the reference documentation for context related functions.  For more
  *  information, see the @ref context.
  */
-/*! @defgroup init Initialization, version and errors
+/*! @defgroup Init Initialization, version and errors
  *
  *  This is the reference documentation for initialization and termination of
  *  the library, version management and error handling.  For more information,
@@ -195,21 +195,21 @@ extern "C" {
 /*! @brief The major version number of the GLFW library.
  *
  *  This is incremented when the API is changed in non-compatible ways.
- *  @ingroup init
+ *  @ingroup Init
  */
 #define GLFW_VERSION_MAJOR          3
 /*! @brief The minor version number of the GLFW library.
  *
  *  This is incremented when features are added to the API but it remains
  *  backward-compatible.
- *  @ingroup init
+ *  @ingroup Init
  */
 #define GLFW_VERSION_MINOR          1
 /*! @brief The revision number of the GLFW library.
  *
  *  This is incremented when a bug fix release is made that does not contain any
  *  API changes.
- *  @ingroup init
+ *  @ingroup Init
  */
 #define GLFW_VERSION_REVISION       1
 /*! @} */
@@ -463,7 +463,7 @@ extern "C" {
  *
  *  See [error handling](@ref error_handling) for how these are used.
  *
- *  @ingroup init
+ *  @ingroup Init
  *  @{ */
 /*! @brief GLFW has not been initialized.
  *
@@ -735,7 +735,7 @@ typedef struct GLFWcursor GLFWcursor;
  *
  *  @sa glfwSetErrorCallback
  *
- *  @ingroup init
+ *  @ingroup Init
  */
 typedef void (* GLFWerrorfun)(int,const char*);
 
@@ -1078,7 +1078,7 @@ typedef struct GLFWimage
  *
  *  @since Added in GLFW 1.0.
  *
- *  @ingroup init
+ *  @ingroup Init
  */
 GLFWAPI int glfwInit(void);
 
@@ -1110,7 +1110,7 @@ GLFWAPI int glfwInit(void);
  *
  *  @since Added in GLFW 1.0.
  *
- *  @ingroup init
+ *  @ingroup Init
  */
 GLFWAPI void glfwTerminate(void);
 
@@ -1137,7 +1137,7 @@ GLFWAPI void glfwTerminate(void);
  *
  *  @since Added in GLFW 1.0.
  *
- *  @ingroup init
+ *  @ingroup Init
  */
 GLFWAPI void glfwGetVersion(int* major, int* minor, int* rev);
 
@@ -1169,7 +1169,7 @@ GLFWAPI void glfwGetVersion(int* major, int* minor, int* rev);
  *
  *  @since Added in GLFW 3.0.
  *
- *  @ingroup init
+ *  @ingroup Init
  */
 GLFWAPI const char* glfwGetVersionString(void);
 
@@ -1202,7 +1202,7 @@ GLFWAPI const char* glfwGetVersionString(void);
  *
  *  @since Added in GLFW 3.0.
  *
- *  @ingroup init
+ *  @ingroup Init
  */
 GLFWAPI GLFWerrorfun glfwSetErrorCallback(GLFWerrorfun cbfun);
 

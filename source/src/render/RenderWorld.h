@@ -1,5 +1,5 @@
-#ifndef GAME_RENDERWORLD_H
-#define GAME_RENDERWORLD_H
+#ifndef GAME_RENDER_H
+#define GAME_RENDER_H
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>         // core window handling
@@ -24,4 +24,4 @@ private:
     std::map<unsigned int, BatchedRenderCube*> block_render_;
 };
 
-#endif //GAME_RENDERWORLD_H
+#endif

@@ -197,7 +197,7 @@ static int str_dump (lua_State *L) {
 
 typedef struct MatchState {
   int matchdepth;  /* control for recursive depth (to avoid C stack overflow) */
-  const char *src_init;  /* init of source string */
+  const char *src_init;  /* Init of source string */
   const char *src_end;  /* end ('\0') of source string */
   const char *p_end;  /* end ('\0') of pattern */
   lua_State *L;

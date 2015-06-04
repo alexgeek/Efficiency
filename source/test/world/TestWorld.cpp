@@ -139,8 +139,10 @@ TEST_F(DimensionTest, GetRegionsAround) {
 
 TEST_F(DimensionTest, GetRegionsAroundPrealloc) {
     const int max_dist = region_distance_;
+    const int x = 0;
+    const int y = 0;
     for(int distance = 0; distance < max_dist; distance++) {
-        std::vector<Region *> regions_around_center = dimension_->GetRegionsAroundPrealloc(0, 0, distance);
+        std::vector<Region *> regions_around_center = dimension_->GetRegionsAroundPrealloc(x, y, distance);
         for (std::vector<Region *>::iterator it = regions_around_center.begin();
              it != regions_around_center.end(); ++it) {
             Region *r = (*it);

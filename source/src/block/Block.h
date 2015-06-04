@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "BlockRegistry.h"
+#include "../render/BatchedRenderCube.h"
 
 class Block;
 
@@ -43,10 +44,17 @@ AxisDirection compass_to_axis(CompassDirection compassDirection);
 class Block {
 friend class BlockRegistry;
 public:
-    Block();
+    Block(std::string);
     ~Block();
+
+    std::string GetName() const { return name_; }
+    Block* SetName(std::string name) { name_ = name; return this; }
+    BatchedRenderCube* GetRenderer() const { return renderer_; }
+    Block* SetRenderer(BatchedRenderCube* renderer) { renderer_ = renderer; return this; }
 private:
     unsigned int id_;
+    std::string name_;
+    BatchedRenderCube* renderer_;
 };
 
 #endif //GAME_BLOCK_H

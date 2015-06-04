@@ -75,7 +75,7 @@ int WindowContext::init_glew() {
     if (glErr == GL_NO_ERROR) {
       return 1;
     } else {
-      std::cout << "Caught GLEW init error in GL" << std::endl;
+      std::cout << "Caught GLEW Init error in GL" << std::endl;
       return 0;
     }
   } else {

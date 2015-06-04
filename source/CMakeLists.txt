@@ -4,8 +4,9 @@ set(GAME_LIB_NAME "gamelib")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 
-# https://github.com/g-truc/glm/issues/300
+# https://github.com/g-truc/glm/issues/30
 add_definitions(-D__NO_INLINE__)
 
 set(GLFW_SOURCE_DIR "external/glfw")
@@ -73,10 +74,18 @@ set(GAME_SRC
     src/render/Shader.cpp
     src/render/Triangle.cpp
     src/util.c
+    src/util/Profiler.cpp
+    src/util/luawrapper.hpp
     src/WindowContext.cpp
 )
+
+set(LUA_BIND_SRC
+    src/LuaGame.cpp
+    src/render/LuaBatchedRenderCube.cpp
+    src/render/LuaRenderWorld.cpp
+)
 add_executable(${PROJECT_NAME} src/main.cpp)
-add_library(${GAME_LIB_NAME} ${GAME_SRC})
+add_library(${GAME_LIB_NAME} ${GAME_SRC} ${LUA_BIND_SRC})
 
 target_link_libraries(${GAME_LIB_NAME} libSOIL glfw ${GLFW_LIBRARIES} glew ${OPENCL_LIBRARIES} liblua)
 
@@ -93,7 +102,7 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
 
 ## Testing ##
 enable_testing()
-add_executable(test_game test/block/TestBlock.cpp test/world/TestWorld.cpp)
+add_executable(test_game test/block/TestBlock.cpp test/world/TestWorld.cpp test/util/TestProfiler.cpp)
 
 target_link_libraries(test_game gtest gtest_main)
 target_link_libraries(test_game ${GAME_LIB_NAME})
