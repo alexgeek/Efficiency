@@ -19,6 +19,7 @@ public:
     BatchedRenderCube* GetBlockRender(unsigned int blockID);
     void RenderBlock(int x, int y, int z, unsigned int blockID);
     void RenderBlock(glm::ivec3 position, unsigned int blockID);
+    void ClearBuffers();
     void Render(Camera* camera);
 private:
     std::map<unsigned int, BatchedRenderCube*> block_render_;

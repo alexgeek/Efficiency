@@ -3,9 +3,10 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <gtest/gtest_prod.h>
 
 /**
- * Dimensions are divided into Regions.cma
+ * Dimensions are divided into Regions.
  * Regions handle the saving and loading of an area in a Dimension.
  * Regions contain basic blocks, logic blocks, and entities.
  */
@@ -15,9 +16,9 @@ class Region
       const static int kBitX = 4;
       const static int kBitY = 8;
       const static int kBitZ = 4;
-      const static int kSizeX = 2^kBitX; // 2^4 = 16
-      const static int kSizeY = 2^kBitY; // 2^8 = 256
-      const static int kSizeZ = 2^kBitZ; // 2^4 = 16
+      const static int kSizeX = 16; // 2^4 = 16
+      const static int kSizeY = 256; // 2^8 = 256
+      const static int kSizeZ = 16; // 2^4 = 16
 
       Region(int x, int z);
       int x() const { return x_; }
@@ -58,6 +59,7 @@ class Region
       int ClearBlock(unsigned char x, unsigned char y, unsigned char z);
     protected:
     private:
+  bool once;
       int x_;
       int z_;
       std::unordered_map<unsigned int, int> block_map_;
@@ -70,6 +72,7 @@ class Region
        * @return 16 bit hash of x,y,z
        */
       unsigned int hash_block_key(unsigned char x, unsigned char y, unsigned char z);
+      FRIEND_TEST(DimensionTest, RegionCollisionCheck);
 };
 
 #endif

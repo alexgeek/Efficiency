@@ -25,6 +25,9 @@ int ScriptEngine::Init() {
     luaL_openlibs(state_);
     luaopen_Game(state_);
     luaopen_BatchedRenderCube(state_);
+    luaopen_Block(state_);
+    luaopen_BlockRegistry(state_);
+    luaopen_Dimension(state_);
     return 1;
 }
 

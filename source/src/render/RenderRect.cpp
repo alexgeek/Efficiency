@@ -21,7 +21,6 @@ RenderRect::RenderRect(std::string texture) : RenderRect(texture, "rect")
 void RenderRect::init(std::string texture)
 {
     texture_id_ = load_texture(texture.c_str());
-    std::cout << "Texure #" << texture_id_ << std::endl;
     printOpenGLError();
 
   	mvp_ = glm::mat4(1.0f);

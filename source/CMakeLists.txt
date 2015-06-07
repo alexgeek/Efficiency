@@ -81,8 +81,11 @@ set(GAME_SRC
 
 set(LUA_BIND_SRC
     src/LuaGame.cpp
+    src/Block/LuaBlock.cpp
+    src/Block/LuaBlockRegistry.cpp
     src/render/LuaBatchedRenderCube.cpp
     src/render/LuaRenderWorld.cpp
+    src/world/LuaDimension.cpp
 )
 add_executable(${PROJECT_NAME} src/main.cpp)
 add_library(${GAME_LIB_NAME} ${GAME_SRC} ${LUA_BIND_SRC})

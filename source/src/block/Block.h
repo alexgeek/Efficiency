@@ -48,7 +48,6 @@ public:
     ~Block();
 
     std::string GetName() const { return name_; }
-    Block* SetName(std::string name) { name_ = name; return this; }
     BatchedRenderCube* GetRenderer() const { return renderer_; }
     Block* SetRenderer(BatchedRenderCube* renderer) { renderer_ = renderer; return this; }
 private:

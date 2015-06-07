@@ -14,7 +14,7 @@
 #include "../camera/Camera.h"
 #include "Shader.h"
 
-#define MAX_BLOCKS 20000
+#define MAX_BLOCKS 0xFFFF
 
 class BatchedRenderCube {
 public:
@@ -24,9 +24,9 @@ public:
                       std::string bottom,
                       std::string back,
                       std::string front);
-
     BatchedRenderCube(std::string top, std::string sides);
     BatchedRenderCube(std::string texture);
+    ~BatchedRenderCube();
 
     void Init(std::string right,
               std::string left,
@@ -37,6 +37,7 @@ public:
 
     void BufferPosition(glm::vec3);
     void BufferPosition(float x, float y, float z);
+    void ClearBuffer();
     unsigned int BufferSize();
     void Render(Camera *camera);
 

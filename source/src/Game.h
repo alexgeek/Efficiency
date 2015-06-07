@@ -34,6 +34,7 @@ public:
     RenderWorld *Render() { return &render_world_; };
     Camera *ActiveCamera() const { return camera_; }
     void SetActiveCamera(Camera *camera) { camera_ = camera; }
+    Dimension* GetDimension(int dimension);
 
 protected:
 private:
@@ -59,6 +60,7 @@ private:
     int init_context();
     int init_input();
     int init_scripting();
+    int init_scripting_globals();
     int init_blocks();
     int init_rendering();
     int load_dimensions();

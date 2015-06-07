@@ -61,7 +61,7 @@ int load_texture(const char* file)									// Load Bitmaps And Convert To Textur
 		
 	if(texture == 0)
     {   
-	printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
+	printf( "SOIL: '%s' for %s\n", SOIL_last_result(), file );
     }
 	return texture;
 }
@@ -86,7 +86,7 @@ GLuint load_texture_cube(const char* right, const char* left, const char* top, c
     glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     if (texture == 0) {
-      printf("SOIL loading error: '%s'\n", SOIL_last_result());
+		printf( "SOIL: '%s' for %s, %s, %s, %s, %s, %s\n", SOIL_last_result(), right, left, top, bottom, back, front);
     }
 	return texture;
 }

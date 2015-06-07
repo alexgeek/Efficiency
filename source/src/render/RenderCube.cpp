@@ -62,7 +62,6 @@ void RenderCube::init(std::string right, std::string left, std::string top, std:
         back.c_str(), 
         front.c_str()
     );
-	std::cout << "Texure #" << texture_id_ << std::endl;
     printOpenGLError();
     
   	mvp_ = glm::mat4(1.0f);

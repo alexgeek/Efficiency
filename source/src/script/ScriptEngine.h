@@ -11,6 +11,9 @@
 #include "../util/luawrapperutil.hpp"
 #include "../render/LuaBatchedRenderCube.h"
 #include "../LuaGame.h"
+#include "../block/LuaBlock.h"
+#include "../block/LuaBlockRegistry.h"
+#include "../world/LuaDimension.h"
 #include "Script.h"
 
 int lua_time(lua_State *l);

@@ -50,9 +50,6 @@ HellStoneBlock = class(RenderBlock, function(ib)
     ib.renderer = load_renderer("assets/textures/hellstone.png")
 end)
 
-
--- if Block["stone"]:opaque then Block["stone"]:render(x, y, z) end
-
 blocks = {}
 
 function add_block(block)

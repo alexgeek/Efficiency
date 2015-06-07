@@ -62,8 +62,8 @@ int Dimension::IsRegionLoaded(int x, int z) {
 }
 
 bool Dimension::SetBlock(int x, int y, int z, int block) {
-  const int regionX = x >> 4;//Region::kBitX;
-  const int regionZ = z >> 4;//Region::kBitZ;
+  const int regionX = x >> 4;
+  const int regionZ = z >> 4;
   Region* region = this->GetRegion(regionX, regionZ);
   return region->SetBlock((unsigned char)x & 15, (unsigned char)y & 15, (unsigned char)z & 15, block);
 }

@@ -4,6 +4,7 @@
 #include <map>
 #include <unordered_map>
 #include "Block.h"
+#include "../render/BatchedRenderCube.h"
 
 class Block;
 
@@ -20,7 +21,9 @@ public:
     unsigned int RegisterBlock(Block* block);
     Block* GetBlock(unsigned int);
     Block* GetBlock(std::string);
+    unsigned int GetBlockID(std::string);
     unsigned int Size();
+    std::map<unsigned int, BatchedRenderCube*> GetBlockRenderers();
 
 private:
     // singleton
@@ -29,9 +32,8 @@ private:
     void operator=(BlockRegistry const&); // prevent assignments
     ~BlockRegistry();
 
-    bool registered_renderers_ = false;
     std::map<unsigned int, Block*> blocks_;
-    std::unordered_map<std::string, Block*> block_names_;
+    std::unordered_map<std::string, unsigned int> block_names_;
 
 };
 

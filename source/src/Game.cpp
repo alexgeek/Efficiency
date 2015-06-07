@@ -23,6 +23,7 @@ int Game::Init() {
     int ret = init_context();
     ret &= init_input();
     ret &= init_scripting();
+
     ret &= init_blocks();
     ret &= init_rendering();
     return ret;
@@ -32,15 +33,6 @@ int Game::Start() {
     load_dimensions();
     /* Loop until the user closes the window */
     GLFWwindow *window = window_context_->window();
-
-    script_engine_->Set<Game>("game", this);
-    int ret;
-    ret = script_engine_->Exec("brender = BatchedRenderCube.new(\"assets/textures/hellstone.png\")");
-    ret = script_engine_->Exec("print(Game.Version())");
-    ret = script_engine_->Exec("for k,v in pairs(BatchedRenderCube) do print(k,v) end");
-    ret = script_engine_->Exec("brender:BufferPosition(1,2,3)");
-    ret = script_engine_->Exec("print(\"foo\", brender:BufferSize())");
-
 
     while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE))
         main_loop();
@@ -73,24 +65,22 @@ int Game::init_scripting() {
 
 
         script_engine_->Run("class.lua");
-        script_engine_->Run("entity.lua");
-        script_engine_->Run("world.lua");
-        script_engine_->Run("component.lua");
-        script_engine_->Run("block.lua");
-        script_engine_->Run("physics.lua");
-        script_engine_->Run("load.lua");
+        //script_engine_->Run("entity.lua");
+        //script_engine_->Run("world.lua");
+        //script_engine_->Run("component.lua");
+        //script_engine_->Run("block.lua");
+        //script_engine_->Run("physics.lua");
 
         action_script_ = script_engine_->MakeScript("action.lua");
         update_script_ = script_engine_->MakeScript("update.lua");
         render_script_ = script_engine_->MakeScript("render.lua");
     }
-    return ret;
+    return init_scripting_globals() && ret;
 }
 
 int Game::init_blocks() {
-    BlockRegistry::Instance().RegisterBlock(new Block("stone"));
-    BlockRegistry::Instance().RegisterBlock(new Block("dirt"));
-    BlockRegistry::Instance().RegisterBlock(new Block("grass"));
+    script_engine_->Run("register.lua");
+    script_engine_->Exec("print('Block Registry Size ', blockRegistry:Size())");
     return 1;
 }
 
@@ -99,6 +89,13 @@ int Game::init_rendering() {
     // renderers
     camera_ = new CameraArcBall(glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(4.9f, 4.9f, 4.9f));
     rect_ = new RenderRect("assets/textures/tex16.png", "inversion2");
+    render_world_.Init();
+    return 1;
+}
+
+int Game::init_scripting_globals() {
+    script_engine_->Set<Game>("game", this);
+    script_engine_->Set<BlockRegistry>("blockRegistry", &BlockRegistry::Instance());
     return 1;
 }
 
@@ -123,7 +120,11 @@ int Game::main_loop() {
     script_engine_->Run(update_script_);
     script_engine_->Run(render_script_);
 
+    update_dimensions();
+
     render_world_.Render(ActiveCamera());
+
+    render_world_.ClearBuffers();
 
     if (glfwGetKey(window, 'F'))
         std::cout << "FPS: " << calcFPS(glfwGetTime()) << std::endl;
@@ -143,12 +144,17 @@ int Game::main_loop() {
     return 1;
 }
 
+Dimension* Game::GetDimension(int dimension) {
+    return dimensions_[dimension];
+}
+
 int Game::load_dimensions() {
     dimensions_[0] = new Dimension();
     glm::vec2 spawn_region_size = glm::vec2(3, 3);
     for (int x = -spawn_region_size.x / 2; x < spawn_region_size.x / 2; x++)
         for (int z = -spawn_region_size.y / 2; z < spawn_region_size.y / 2; z++)
             dimensions_[0]->LoadRegion(x, z);
+    script_engine_->Run("load-dimension2.lua");
     return 1;
 }
 
