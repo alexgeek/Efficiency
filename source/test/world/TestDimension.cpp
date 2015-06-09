@@ -59,48 +59,6 @@ TEST_F(DimensionTest, BlockAccessAll) {
     }
 }
 
-TEST_F(DimensionTest, RegionAccessSquare) {
-    const unsigned int size = 3;
-    int x, z;
-    for(x = -size; x <= size; x++)
-        for(z = -size; z <= size; z++){
-            Region* region = dimension_->GetRegion(x,z);
-            EXPECT_EQ(x, region->x());
-            EXPECT_EQ(z, region->z());
-        }
-}
-
-TEST_F(DimensionTest, RegionCollisionCheck) {
-    std::set<unsigned int> hashes;
-    std::unordered_map<unsigned int, unsigned int> collisions;
-    Region *region = dimension_->GetRegion(0, 0);
-
-    for (int x = 0; x < Region::kSizeX; x++) {
-        for (int y = 0; y < Region::kSizeY; y++) {
-            for (int z = 0; z < Region::kSizeZ; z++) {
-                const unsigned int hash = region->hash_block_key(x, y, z);
-                const bool is_member = hashes.find(hash) != hashes.end();
-                if(is_member) {
-                    collisions[hash]++;
-                } else {
-                    hashes.insert(hash);
-                }
-            }
-        }
-    }
-
-    unsigned int total_collisions = 0;
-    for(std::unordered_map<unsigned int, unsigned int>::iterator it = collisions.begin();
-            it != collisions.end(); it++)
-    {
-        total_collisions += it->second;
-    }
-
-    EXPECT_EQ(total_collisions, 0);
-    EXPECT_EQ(collisions.size(), 0);
-    EXPECT_EQ(hashes.size(), 65536);
-}
-
 TEST_F(DimensionTest, RegionAccessNorthSouth) {
     const unsigned int size = 3;
     int z, x = 1;
@@ -194,7 +152,6 @@ TEST_F(DimensionTest, GetRegionsAroundPrealloc) {
         for (std::vector<Region *>::iterator it = regions_around_center.begin();
              it != regions_around_center.end(); ++it) {
             Region *r = (*it);
-            //EXPECT_TRUE(false) << r->x() << "," << r->z() << std::endl;
         }
         EXPECT_EQ(regions_around_center.size(), (2 * distance + 1) * (2 * distance + 1));
     }

@@ -3,18 +3,11 @@
 
 Region::Region(int x, int z) :
         x_(x),
-        z_(z),
-        once(true)
+        z_(z)
 {
 }
 
 void Region::Update() {
-    if(once)
-    {
-        std::cout << "Processing region " << x() << "," << z() << std::endl;
-        printf("Processing region (%d, %d) of size <%d, %d, %d>\n", this->x(), this->z(),
-                Region::kSizeX, Region::kSizeY, Region::kSizeZ);
-    }
     for (int x = 0; x < Region::kSizeX; x++) {
         for (int y = 0; y < Region::kSizeY; y++) {
             for (int z = 0; z < Region::kSizeZ; z++) {
@@ -26,15 +19,10 @@ void Region::Update() {
                     float blockY = y;
                     float blockZ = this->z()*16 + z;
                     render->BufferPosition(blockX, blockY, blockZ);
-                    if(this->x() == 0 && this->z() == 0 && once)
-                    {
-                        printf("<%f, %f, %f> (%d, %d)\n", blockX, blockY, blockZ, this->x(), this->z());
-                    }
                 }
             }
         }
     }
-    if(once) once = false;
 }
 
 int Region::GetBlock(unsigned char x, unsigned char y, unsigned char z) {

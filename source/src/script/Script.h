@@ -11,8 +11,8 @@ class Script
       Script();
       Script(std::string name, std::string contents_);
       /* accessors & mutators */
-      std::string name() const { return name_; }
-      std::string contents() const { return contents_; }
+      std::string Name() const { return name_; }
+      std::string Contents() const { return contents_; }
     protected:
     private:
       std::string name_;

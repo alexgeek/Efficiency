@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <lua.hpp>
+#include "LuaScript.h"
 #include "../util/luawrapper.hpp"
 #include "../util/luawrapperutil.hpp"
 #include "../render/LuaBatchedRenderCube.h"
@@ -104,14 +105,14 @@ public:
 
     /** Accessors & mutators **/
 
-    std::string script_dir() const { return script_dir_; }
+    std::string ScriptDirectory() const { return script_directory_; }
 
-    void set_script_dir(std::string dir) { script_dir_ = dir; };
+    void SetScriptDirectory(std::string directory) { script_directory_ = directory; };
 
 protected:
 private:
     lua_State *state_;
-    std::string script_dir_;
+    std::string script_directory_;
 
 };
 

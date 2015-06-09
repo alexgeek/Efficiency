@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "../util.h"
-#include "../Debug.h"
+#include "../util/Debug.h"
 #include "../camera/Camera.h"
 #include "Shader.h"
 

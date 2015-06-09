@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "Debug.h"
 
 int print_gl_error(const char *file, int line) {
@@ -15,7 +16,8 @@ int print_gl_error(const char *file, int line) {
             case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION";  break;
         }
 
-        cerr << "GL_" << error.c_str() <<" - "<<file<<":"<<line<<endl;
+        fprintf(stderr, "GL_%s at %s:%d\n", error.c_str(), file, line);
+
         err=glGetError();
     }
 

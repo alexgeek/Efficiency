@@ -154,7 +154,7 @@ int Game::load_dimensions() {
     for (int x = -spawn_region_size.x / 2; x < spawn_region_size.x / 2; x++)
         for (int z = -spawn_region_size.y / 2; z < spawn_region_size.y / 2; z++)
             dimensions_[0]->LoadRegion(x, z);
-    script_engine_->Run("load-dimension2.lua");
+    script_engine_->Run("load-dimension.lua");
     return 1;
 }
 

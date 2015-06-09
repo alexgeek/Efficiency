@@ -59,7 +59,6 @@ class Region
       int ClearBlock(unsigned char x, unsigned char y, unsigned char z);
     protected:
     private:
-  bool once;
       int x_;
       int z_;
       std::unordered_map<unsigned int, int> block_map_;
@@ -72,7 +71,7 @@ class Region
        * @return 16 bit hash of x,y,z
        */
       unsigned int hash_block_key(unsigned char x, unsigned char y, unsigned char z);
-      FRIEND_TEST(DimensionTest, RegionCollisionCheck);
+      FRIEND_TEST(RegionTest, RegionCollisionCheck);
 };
 
 #endif

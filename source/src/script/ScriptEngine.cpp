@@ -13,7 +13,7 @@ int lua_test(lua_State *l) {
 const std::string ScriptEngine::kDefaultScriptDir = "scripts/";
 
 ScriptEngine::ScriptEngine() :
-        script_dir_(kDefaultScriptDir) { }
+        script_directory_(kDefaultScriptDir) { }
 
 ScriptEngine::~ScriptEngine() {
     // close the Lua state
@@ -28,6 +28,7 @@ int ScriptEngine::Init() {
     luaopen_Block(state_);
     luaopen_BlockRegistry(state_);
     luaopen_Dimension(state_);
+    luaopen_Script(state_);
     return 1;
 }
 
@@ -40,27 +41,27 @@ int ScriptEngine::RegisterFunction(lua_CFunction fn, std::string name) {
 }
 
 int ScriptEngine::Exec(const std::string lua_expression) {
-    int ret = luaL_dostring(state_, lua_expression.c_str()) == LUA_OK;
-    if(!ret) printf("%s\n", lua_tostring(state_, -1));
-    return ret;
+    int ret = luaL_dostring(state_, lua_expression.c_str());
+    if(ret) printf("%s\n", lua_tostring(state_, -1));
+    return ret == LUA_OK;
 }
 
 int ScriptEngine::Run(const std::string file) {
     const std::string filepath = "scripts/" + file;
     int ret = luaL_dofile(state_, filepath.c_str());
-    if (ret) std::cerr << lua_tostring(state_, -1) << std::endl;
+    if(ret) printf("%s\n", lua_tostring(state_, -1));
     // LUA_OK = 0 so return success (1) if ret == 0
     return ret == LUA_OK;
 }
 
 
 int ScriptEngine::Run(const Script *script) {
-    return luaL_dostring(state_, script->contents().c_str()) == LUA_OK;
+    return luaL_dostring(state_, script->Contents().c_str()) == LUA_OK;
 }
 
 std::string ScriptEngine::LoadScript(const std::string file) {
     using namespace std;
-    ifstream ifs((script_dir_ + file).c_str(), ios::in | ios::binary | ios::ate);
+    ifstream ifs((script_directory_ + file).c_str(), ios::in | ios::binary | ios::ate);
 
     ifstream::pos_type fileSize = ifs.tellg();
     ifs.seekg(0, ios::beg);

@@ -3,7 +3,7 @@
 
 #include "../default.h"
 #include "../util.h"
-#include "../Debug.h"
+#include "../util/Debug.h"
 #include "Shader.h"
 #include "../camera/Camera.h"
 

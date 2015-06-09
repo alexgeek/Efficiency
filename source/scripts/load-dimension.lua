@@ -9,9 +9,9 @@ local iceBrick = blockRegistry:GetBlockID("icebrick")
 local size = 8
 count = 0
 for x = -size, size do
-  for y = -size*4, 0 do
+  for y = 0, size*4 do
     for z = -size, size do
-      if math.random(-y+1) < 3 then
+      if math.random(0,10) < 3 then
         dimension:SetBlock(x,y,z,grass)
       else
         dimension:SetBlock(x,y,z,stone)
@@ -22,9 +22,9 @@ for x = -size, size do
 end
 
 print("Count", count)
-
+--[[
 for x = -size, size do
-    for y = 0, 9 do
+    for y = size*4, size*4+9 do
         for z = -size, size do
             if math.abs(x) == math.abs(size) or math.abs(z) == math.abs(size) then
                 if math.abs(x) == math.abs(z) then
@@ -37,5 +37,5 @@ for x = -size, size do
         end
     end
 end
-
+--]]
 print("Count", count)

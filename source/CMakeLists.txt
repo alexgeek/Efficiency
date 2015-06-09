@@ -58,7 +58,7 @@ set(GAME_SRC
     src/block/BlockRegistry.cpp
     src/camera/Camera.cpp
     src/camera/CameraArcBall.cpp
-    src/Debug.cpp
+    src/util/Debug.cpp
     src/world/Dimension.cpp
     src/Game.cpp
     src/Input.cpp
@@ -86,6 +86,7 @@ set(LUA_BIND_SRC
     src/render/LuaBatchedRenderCube.cpp
     src/render/LuaRenderWorld.cpp
     src/world/LuaDimension.cpp
+    src/script/LuaScript.cpp
 )
 add_executable(${PROJECT_NAME} src/main.cpp)
 add_library(${GAME_LIB_NAME} ${GAME_SRC} ${LUA_BIND_SRC})
@@ -105,7 +106,14 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
 
 ## Testing ##
 enable_testing()
-add_executable(test_game test/block/TestBlock.cpp test/world/TestWorld.cpp test/util/TestProfiler.cpp)
+
+set(TEST_SRC
+    test/block/TestBlock.cpp
+    test/world/TestRegion.cpp
+    test/world/TestDimension.cpp
+    test/util/TestProfiler.cpp
+)
+add_executable(test_game ${TEST_SRC})
 
 target_link_libraries(test_game gtest gtest_main)
 target_link_libraries(test_game ${GAME_LIB_NAME})
