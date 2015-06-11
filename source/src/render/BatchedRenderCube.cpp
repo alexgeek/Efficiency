@@ -40,7 +40,7 @@ static const GLfloat vertex_buffer_data[] = {
 };
 
 BatchedRenderCube::BatchedRenderCube(std::string right, std::string left, std::string top, std::string bottom,
-                                     std::string back, std::string front) : shader_(Shader("batchcube")) {
+                                     std::string back, std::string front) : shader_(Shader("batchcube")), dirty_(1) {
     Init(right, left, top, bottom, back, front);
 }
 
@@ -86,7 +86,7 @@ void BatchedRenderCube::Init(std::string right, std::string left, std::string to
 void BatchedRenderCube::prepare(Camera *camera) {
     glUseProgram(shader_.id());
 
-    mv_ = camera->get_projection() * camera->get_view();
+    mv_ = camera->GetProjection() * camera->GetView();
     glUniformMatrix4fv(mv_id_, 1, GL_FALSE, &mv_[0][0]);
 
     glUniform1f(glGetUniformLocation(shader_.id(), "globaltime"), glfwGetTime());
@@ -95,8 +95,12 @@ void BatchedRenderCube::prepare(Camera *camera) {
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id_);
 
     glBindBuffer(GL_ARRAY_BUFFER, position_buffer_id_);
-    glBufferData(GL_ARRAY_BUFFER, MAX_BLOCKS * sizeof(glm::vec3), NULL, GL_STREAM_DRAW); // Buffer orphaning
-    glBufferSubData(GL_ARRAY_BUFFER, 0, positions_.size() * sizeof(glm::vec3), &positions_[0]);
+
+    if(dirty_ > 0) {
+        glBufferData(GL_ARRAY_BUFFER, MAX_BLOCKS * sizeof(glm::vec3), NULL, GL_STREAM_DRAW); // Buffer orphaning
+        glBufferSubData(GL_ARRAY_BUFFER, 0, positions_.size() * sizeof(glm::vec3), &positions_[0]);
+        dirty_ = 0;
+    }
     assert(positions_.size() < MAX_BLOCKS);
     printOpenGLError();
 
@@ -107,6 +111,7 @@ void BatchedRenderCube::BufferPosition(glm::vec3 position) {
     assert(position.y >= 0);
     assert(position.y <= 256);
     positions_.push_back(position);
+    dirty_++;
 }
 
 void BatchedRenderCube::BufferPosition(float x, float y, float z) {

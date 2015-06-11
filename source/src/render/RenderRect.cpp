@@ -38,7 +38,7 @@ void RenderRect::draw(Camera* camera, glm::vec2 resolution)
 {
     glUseProgram(shader_.id());
 
-    mvp_ = camera->get_projection() * camera->get_view() * glm::translate(glm::mat4(1.0f), glm::vec3(0, 1.0f, 0));
+    mvp_ = camera->GetProjection() * camera->GetView() * glm::translate(glm::mat4(1.0f), glm::vec3(0, 1.0f, 0));
 	glUniformMatrix4fv(glGetUniformLocation(shader_.id(), "MVP"), 1, GL_FALSE, &mvp_[0][0]);
   	glUniform3f(glGetUniformLocation(shader_.id(), "iResolution"), resolution.x, resolution.y, 1.0f);
   	glUniform1f(glGetUniformLocation(shader_.id(), "iGlobalTime"), glfwGetTime());

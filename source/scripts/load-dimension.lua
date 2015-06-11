@@ -9,16 +9,16 @@ local iceBrick = blockRegistry:GetBlockID("icebrick")
 local size = 8
 count = 0
 for x = -size, size do
-  for y = 0, size*4 do
-    for z = -size, size do
-      if math.random(0,10) < 3 then
-        dimension:SetBlock(x,y,z,grass)
-      else
-        dimension:SetBlock(x,y,z,stone)
-      end
-      count = count + 1
+    for y = 0, size*4 do
+        for z = -size, size do
+          if math.random(0,10) < 3 then
+            dimension:SetBlock(x,y,z,grass)
+          else
+            dimension:SetBlock(x,y,z,stone)
+          end
+          count = count + 1
+        end
     end
-  end
 end
 
 print("Count", count)

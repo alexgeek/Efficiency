@@ -10,18 +10,18 @@ CameraArcBall::CameraArcBall(glm::vec3 position, glm::vec3 target) :
 {
 }
 
-glm::mat4 CameraArcBall::get_projection()
+glm::mat4 CameraArcBall::GetProjection()
 {
     return default_projection();
 }
 
-glm::mat4 CameraArcBall::get_view()
+glm::mat4 CameraArcBall::GetView()
 {
     return glm::lookAt(position_, target_, up_);
 }
 
 // http://gamedev.stackexchange.com/questions/53333/how-to-implement-a-basic-arcball-ActiveCamera-in-opengl-with-glm
-void CameraArcBall::update(GLFWwindow* window)
+void CameraArcBall::Update(GLFWwindow *window)
 {
     float now = glfwGetTime();
     float delta = now - time_;
@@ -36,7 +36,7 @@ void CameraArcBall::update(GLFWwindow* window)
 
     /*if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
     {*/
-        glm::mat4 view = get_view();
+        glm::mat4 view = GetView();
         glm::vec3 camera_right = glm::vec3(view[0][0], view[1][0], view[2][0]);
         if(mouse_delta.y != 0)
             position_ = glm::rotate(position_ - target_, rotate_speed_ * (float)mouse_delta.y, camera_right) + target_;
@@ -48,7 +48,6 @@ void CameraArcBall::update(GLFWwindow* window)
     glm::vec3 movef = move_speed_ * glm::normalize(target_ - position_) * delta;
 
     glm::vec3 pt = position_ - target_;
-    float distSqr = glm::dot(pt, pt);
     // zoom in
     if(glfwGetKey(window, '='))
         position_ += movef;

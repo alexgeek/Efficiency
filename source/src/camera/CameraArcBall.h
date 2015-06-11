@@ -10,9 +10,9 @@ class CameraArcBall : public Camera
 {
     public:
         CameraArcBall(glm::vec3 position, glm::vec3 target);
-        glm::mat4 get_projection();
-        glm::mat4 get_view();
-        void update(GLFWwindow*);
+        glm::mat4 GetProjection();
+        glm::mat4 GetView();
+        void Update(GLFWwindow *);
     protected:
         glm::vec3 position_;
         glm::vec3 target_;

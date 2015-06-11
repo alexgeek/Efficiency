@@ -112,7 +112,7 @@ int Game::main_loop() {
     Input::Instance().update(window);
 
     // update view and projection
-    camera_->update(window);
+    camera_->Update(window);
 
     if (glfwGetKey(window, 'U'))
         script_engine_->Run(action_script_);

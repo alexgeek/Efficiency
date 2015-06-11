@@ -51,8 +51,8 @@ protected:
     GLint mv_id_;
     glm::mat4 mv_;
 private:
+    int dirty_;
     void prepare(Camera *camera);
-
     void finish();
 };
 

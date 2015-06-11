@@ -38,7 +38,7 @@ void RenderQuad::draw(Camera* camera, glm::vec3 position)
 {
     glUseProgram(shader_.id());
 
-    mvp_ = camera->get_projection() * camera->get_view() * glm::translate(glm::mat4(1.0f), position);
+    mvp_ = camera->GetProjection() * camera->GetView() * glm::translate(glm::mat4(1.0f), position);
 	glUniformMatrix4fv(glGetUniformLocation(shader_.id(), "MVP"), 1, GL_FALSE, &mvp_[0][0]);
 	
   	glUniform1f(glGetUniformLocation(shader_.id(), "globaltime"), glfwGetTime());
