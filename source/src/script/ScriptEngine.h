@@ -19,21 +19,7 @@
 #include "Script.h"
 
 int lua_time(lua_State *l);
-
-int lua_drawbatch(lua_State *l);
-
-int lua_drawcube(lua_State *l);
-
-int lua_load_renderer(lua_State *l);
-
-int lua_set_camera(lua_State *l);
-
-int lua_get_block(lua_State *l);
-
-int lua_get_block_by_name(lua_State *l);
-
 int lua_test(lua_State *l);
-
 
 class ScriptEngine {
 public:
