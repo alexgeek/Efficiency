@@ -1,6 +1,9 @@
 #ifndef GAME_TEXTURE_H
 #define GAME_TEXTURE_H
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 class Texture
 {
 public:

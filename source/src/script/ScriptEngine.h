@@ -15,6 +15,7 @@
 #include "../block/LuaBlock.h"
 #include "../block/LuaBlockRegistry.h"
 #include "../world/LuaDimension.h"
+#include "../player/LuaPlayer.h"
 #include "Script.h"
 
 int lua_time(lua_State *l);

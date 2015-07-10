@@ -54,22 +54,10 @@ int Game::init_context() {
 int Game::init_scripting() {
     int ret = script_engine_->Init();
     if (ret) {
-        //script_engine_->RegisterFunction(lua_set_camera, "ActiveCamera");
-        script_engine_->RegisterFunction(lua_drawcube, "drawblock");
-        script_engine_->RegisterFunction(lua_load_renderer, "load_renderer");
-        script_engine_->RegisterFunction(lua_drawbatch, "drawbatch");
         script_engine_->RegisterFunction(lua_time, "time");
-        script_engine_->RegisterFunction(lua_get_block, "getBlock");
-        script_engine_->RegisterFunction(lua_get_block_by_name, "getBlockByName");
         script_engine_->RegisterFunction(lua_test, "test");
 
-
         script_engine_->Run("class.lua");
-        //script_engine_->Run("entity.lua");
-        //script_engine_->Run("world.lua");
-        //script_engine_->Run("component.lua");
-        //script_engine_->Run("block.lua");
-        //script_engine_->Run("physics.lua");
 
         action_script_ = script_engine_->MakeScript("action.lua");
         update_script_ = script_engine_->MakeScript("update.lua");

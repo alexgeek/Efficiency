@@ -56,26 +56,35 @@ add_definitions(
 set(GAME_SRC
     src/block/Block.cpp
     src/block/BlockRegistry.cpp
+
     src/camera/Camera.cpp
     src/camera/CameraArcBall.cpp
-    src/util/Debug.cpp
-    src/world/Dimension.cpp
+
     src/Game.cpp
     src/Input.cpp
-    src/world/Region.cpp
-    src/world/Region.cpp
+
+    src/player/Player.cpp
+
     src/render/RenderCube.cpp
     src/render/RenderQuad.cpp
     src/render/RenderRect.cpp
+
     src/script/Script.cpp
     src/script/ScriptEngine.cpp
+
     src/render/RenderWorld.cpp
     src/render/BatchedRenderCube.cpp
     src/render/Shader.cpp
     src/render/Triangle.cpp
+
     src/util.c
-    src/util/Profiler.cpp
+    src/util/Debug.cpp
     src/util/luawrapper.hpp
+    src/util/Profiler.cpp
+
+    src/world/Dimension.cpp
+    src/world/Region.cpp
+
     src/WindowContext.cpp
 )
 
@@ -87,6 +96,7 @@ set(LUA_BIND_SRC
     src/render/LuaRenderWorld.cpp
     src/world/LuaDimension.cpp
     src/script/LuaScript.cpp
+    src/player/LuaPlayer.cpp
 )
 add_executable(${PROJECT_NAME} src/main.cpp)
 add_library(${GAME_LIB_NAME} ${GAME_SRC} ${LUA_BIND_SRC})
@@ -112,6 +122,7 @@ set(TEST_SRC
     test/world/TestRegion.cpp
     test/world/TestDimension.cpp
     test/util/TestProfiler.cpp
+    test/render/TestTexture.cpp
 )
 add_executable(test_game ${TEST_SRC})
 

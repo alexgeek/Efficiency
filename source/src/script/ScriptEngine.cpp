@@ -29,6 +29,7 @@ int ScriptEngine::Init() {
     luaopen_BlockRegistry(state_);
     luaopen_Dimension(state_);
     luaopen_Script(state_);
+    luaopen_Player(state_);
     return 1;
 }
 
